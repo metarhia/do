@@ -13,48 +13,63 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
   Do constructor.
 
-    // Create 1 todo
-    var todo = new Do();
+  Examples:
 
-    // Create 3 todos.
-    var todo = new Do(3);
+```js
+// Create 1 todo
+var todo = new Do();
+// Create 3 todos.
+var todo = new Do(3);
+```
 
 ### Do.amount(value:Number?)
 
   Setter/getter for amount of todos.
 
-    // Get the current amount.
-    todo.amount();
+  Examples:
 
-    // Set a new amount
-    todo.amount(3);
+```js
+// Get the current amount.
+todo.amount();
+// Set a new amount
+todo.amount(3);
+```
 
 ### Do.valueOf()
 
   Enable to cast the instance to the number of todos.
 
-    new Do(3) == 3; // true
+  Examples:
 
+```js
+new Do(3) == 3; // true
+```
 
 ### Do.inc(value:Number?)
 
   Increase amount of todos.
 
-    // add 1 more
-    todo.inc();
+  Examles:
 
-    // add 3 more
-    todo.inc(3)
+```js
+// add 1 more
+todo.inc();
+// add 3 more
+todo.inc(3)
+```
 
 ### Do.dec(value:Number?)
 
   Decrease amount of todos.
 
-    // remove 1
-    todo.dec();
+  Examples:
 
-    // remove 3
-    todo.dec(3)
+```js
+// remove 1
+todo.dec();
+// remove 3
+todo.dec(3)
+```
 
 ### Do.error(err:Function|Error?)
 
@@ -62,38 +77,46 @@ If you don't want to use all the async/chain libraries but just want a reliable 
   If an error is passed to the Do#done and the error callback is defined, it is
   called every time.
 
-    // define error callback
-    todo.error(function(err) {
+  Examples:
 
-    });
-
-    // trigger an error manually
-    todo.error(new Error());
+```js
+// define error callback
+todo.error(function(err) {
+});
+// trigger an error manually
+todo.error(new Error());
+```
 
 ### Do.success(fn:Function?)
 
   Set an success callback or trigger a success.
   If a todo is done without errors and success callback is defined it will be called by Do#done.
 
-    // define success callback
-    todo.success(function(err) {
+  Examples:
 
-    });
-
-    // trigger success manually
-    todo.success();
+```js
+// define success callback
+todo.success(function() {
+});
+// trigger success manually
+todo.success();
+```
 
 ### Do.done(err:Error?)
 
   Indicate a done task. If an error is passed as first parameter - error will
   be triggered.
 
-    todo.done(err);
-    todo.done();
+  Examples:
 
-    // context of `todo.done` is ensured.
-    someTask(todo.done);
-
+```js
+// with error
+todo.done(err);
+// without error
+todo.done();
+// context of `todo.done` is ensured.
+someTask(todo.done);
+```
 ## Examples
 
     var Do = require('do');
