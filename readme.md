@@ -20,9 +20,11 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 var todo = new Do();
 // Create 3 todos.
 var todo = new Do(3);
+// without new statement
+var todo = Do();
 ```
 
-### Do.amount(value:Number?)
+### Do#amount(value:Number?)
 
   Setter/getter for amount of todos.
 
@@ -35,7 +37,7 @@ todo.amount();
 todo.amount(3);
 ```
 
-### Do.valueOf()
+### Do#valueOf()
 
   Enable to cast the instance to the number of todos.
 
@@ -45,7 +47,7 @@ todo.amount(3);
 new Do(3) == 3; // true
 ```
 
-### Do.inc(value:Number?)
+### Do#inc(value:Number?)
 
   Increase amount of todos.
 
@@ -58,7 +60,7 @@ todo.inc();
 todo.inc(3)
 ```
 
-### Do.dec(value:Number?)
+### Do#dec(value:Number?)
 
   Decrease amount of todos.
 
@@ -71,7 +73,7 @@ todo.dec();
 todo.dec(3)
 ```
 
-### Do.error(err:Function|Error?)
+### Do#error(err:Function|Error?)
 
   Set an error callback or trigger an error.
   If an error is passed to the Do#done and the error callback is defined, it is
@@ -87,7 +89,7 @@ todo.error(function(err) {
 todo.error(new Error());
 ```
 
-### Do.success(fn:Function?)
+### Do#success(fn:Function?)
 
   Set an success callback or trigger a success.
   If a todo is done without errors and success callback is defined it will be called by Do#done.
@@ -102,7 +104,7 @@ todo.success(function() {
 todo.success();
 ```
 
-### Do.done(err:Error?)
+### Do#done(err:Error?)
 
   Indicate a done task. If an error is passed as first parameter - error will
   be triggered.
@@ -117,6 +119,7 @@ todo.done();
 // context of `todo.done` is ensured.
 someTask(todo.done);
 ```
+
 ## Examples
 
     var Do = require('do');
@@ -152,6 +155,10 @@ someTask(todo.done);
             }
         });
     });
+
+## Run tests
+
+    npm test
 
 ## Licence
 

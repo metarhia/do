@@ -7,11 +7,16 @@
  *   var todo = new Do();
  *   // Create 3 todos.
  *   var todo = new Do(3);
+ *   // without new statement
+ *   var todo = Do();
  *
  * @param {Number?} amount of todos
  * @api public
  */
 function Do(amount) {
+    if (!(this instanceof Do)) {
+        return new Do(amount);
+    }
     this._amount = amount || 1;
     this.errors = [];
     this.done = this.done.bind(this);
