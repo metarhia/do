@@ -2,7 +2,7 @@
 
 If you don't want to use all the async/chain libraries but just want a reliable way to know when the function is done - this is for you.
 
-## Usage
+## Installation
     npm i do
 
     var Do = require('do');
