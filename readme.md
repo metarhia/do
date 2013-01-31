@@ -1,6 +1,6 @@
 ## "do" is the simplest way to manage callbacks.
 
-If you don't want to use all the async/chain libraries but just want a reliable way to know when the function is done, this is for you.
+If you don't want to use all the async/chain libraries but just want a reliable way to know when the function is done - this is for you.
 
 ## Usage
     npm i do
@@ -27,7 +27,6 @@ If you don't want to use all the async/chain libraries but just want a reliable 
     todo.amount();
 
     // Set a new amount
-
     todo.amount(3);
 
 ### Do.valueOf()
@@ -89,55 +88,55 @@ If you don't want to use all the async/chain libraries but just want a reliable 
   Indicate a done task. If an error is passed as first parameter - error will
   be triggered.
 
-   todo.done(err);
-   todo.done();
+    todo.done(err);
+    todo.done();
 
-   // context of `todo.done` is ensured.
-   someTask(todo.done);
+    // context of `todo.done` is ensured.
+    someTask(todo.done);
 
 ## Examples
 
-var Do = require('do');
+    var Do = require('do');
 
-exports.user = function(req, res, next) {
-    var todo = new Do(3);
+    exports.user = function(req, res, next) {
+        var todo = new Do(3);
 
-    // If an error happens, next callback will be called and the error passed along.
-    todo.error(next);
+        // If an error happens, next callback will be called and the error passed along.
+        todo.error(next);
 
-    // If everything is done and no errors happened, success callback is called.
-    todo.success(function() {
-        res.send({status: 'ok'});
-    });
+        // If everything is done and no errors happened, success callback is called.
+        todo.success(function() {
+            res.send({status: 'ok'});
+        });
 
-    function update(user) {
-        user.name = 'new name';
-        db.update(userId, user, todo.done);
-    }
-
-    function notify(user) {
-        sendNotification(user, todo.done);
-    }
-
-    db.fetch(userId, function(err, user) {
-        if (err) return todo.done(err);
-        update(user);
-        notify(user);
-        addSomeBackgroundTask(user, todo.done);
-
-        if (userId == '123456') {
-            todo.inc();
-            specialTaskForTheUser(user, todo.done);
+        function update(user) {
+            user.name = 'new name';
+            db.update(userId, user, todo.done);
         }
 
-        if (user.type == 'freak') {
-            todo.inc(3);
-            task1(user, todo.done);
-            task2(user, todo.done);
-            task3(user, todo.done);
+        function notify(user) {
+            sendNotification(user, todo.done);
         }
-    });
-};
+
+        db.fetch(userId, function(err, user) {
+            if (err) return todo.done(err);
+            update(user);
+            notify(user);
+            addSomeBackgroundTask(user, todo.done);
+
+            if (userId == '123456') {
+                todo.inc();
+                specialTaskForTheUser(user, todo.done);
+            }
+
+            if (user.type == 'freak') {
+                todo.inc(3);
+                task1(user, todo.done);
+                task2(user, todo.done);
+                task3(user, todo.done);
+            }
+        });
+    };
 
 ## Licence
 
