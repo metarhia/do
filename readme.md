@@ -122,6 +122,44 @@ someTask(todo.done);
 
 ## Examples
 
+### Mix parallel and serial executions
+
+    var Do = require('do'),
+        todo = new Do(3);
+
+    todo.error(errorHandler);
+    todo.success(successHandler);
+
+    function serialTask1(callback) {
+        var todo = new Do(2);
+        todo.error(callback);
+        todo.success(callback);
+        parallelTask1(todo.done);
+        parallelTask2(todo.done);
+    });
+
+    function serialTask2(callback) {
+        var todo = new Do(2);
+        todo.error(callback);
+        todo.success(callback);
+        parallelTask3(todo.done);
+        parallelTask4(todo.done);
+    });
+
+    function serialTask3(callback) {
+        var todo = new Do(2);
+        todo.error(callback);
+        todo.success(callback);
+        parallelTask5(todo.done);
+        parallelTask6(todo.done);
+    });
+
+    serialTask1(todo.done);
+    serialTask2(todo.done);
+    serialTask3(todo.done);
+
+### Express application
+
     var Do = require('do');
 
     app.post('/', function(req, res, next) {
