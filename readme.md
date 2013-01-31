@@ -33,7 +33,7 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
   Enable to cast the instance to the number of todos.
 
-    console.log(new Do(3)); // 3
+    new Do(3) == 3; // true
 
 
 ### Do.inc(value:Number?)
