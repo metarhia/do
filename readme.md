@@ -98,7 +98,7 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
     var Do = require('do');
 
-    exports.user = function(req, res, next) {
+    app.post('/', function(req, res, next) {
         var todo = new Do(3);
 
         // If an error happens, next callback will be called and the error passed along.
@@ -109,19 +109,11 @@ If you don't want to use all the async/chain libraries but just want a reliable 
             res.send({status: 'ok'});
         });
 
-        function update(user) {
-            user.name = 'new name';
-            db.update(userId, user, todo.done);
-        }
-
-        function notify(user) {
-            sendNotification(user, todo.done);
-        }
-
         db.fetch(userId, function(err, user) {
             if (err) return todo.done(err);
-            update(user);
-            notify(user);
+
+            update(user, todo.done);
+            notify(user, todo.done);
             addSomeBackgroundTask(user, todo.done);
 
             if (userId == '123456') {
@@ -136,7 +128,7 @@ If you don't want to use all the async/chain libraries but just want a reliable 
                 task3(user, todo.done);
             }
         });
-    };
+    });
 
 ## Licence
 
