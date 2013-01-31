@@ -17,7 +17,7 @@ function Do(amount) {
     if (!(this instanceof Do)) {
         return new Do(amount);
     }
-    this._amount = amount || 1;
+    this._amount = amount || 0;
     this.errors = [];
     this.done = this.done.bind(this);
 }

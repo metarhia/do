@@ -17,11 +17,11 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
 ```js
 // Create 1 todo
-var todo = new Do();
+var todo = new Do(1);
 // Create 3 todos.
 var todo = new Do(3);
 // without new statement
-var todo = Do();
+var todo = Do(1);
 ```
 
 ### Do#amount(value:Number?)
@@ -125,38 +125,53 @@ someTask(todo.done);
 ### Mix parallel and serial executions
 
     var Do = require('do'),
-        todo = new Do(3);
+        todo = new Do(2);
 
     todo.error(errorHandler);
     todo.success(successHandler);
 
-    function serialTask1(callback) {
-        var todo = new Do(2);
-        todo.error(callback);
-        todo.success(callback);
-        parallelTask1(todo.done);
-        parallelTask2(todo.done);
-    });
+    function parallelTask1(callback) {
+        function serialTask1() {
+            var todo = new Do(2);
+            todo.error(callback);
+            todo.success(serialTask2);
+            parallelTask1(todo.done);
+            parallelTask2(todo.done);
+        }
 
-    function serialTask2(callback) {
-        var todo = new Do(2);
-        todo.error(callback);
-        todo.success(callback);
-        parallelTask3(todo.done);
-        parallelTask4(todo.done);
-    });
+        function serialTask2() {
+            var todo = new Do(2);
+            todo.error(callback);
+            todo.success(callback);
+            parallelTask1(todo.done);
+            parallelTask2(todo.done);
+        }
 
-    function serialTask3(callback) {
-        var todo = new Do(2);
-        todo.error(callback);
-        todo.success(callback);
-        parallelTask5(todo.done);
-        parallelTask6(todo.done);
-    });
+        serialTask1();
+    }
 
-    serialTask1(todo.done);
-    serialTask2(todo.done);
-    serialTask3(todo.done);
+    function parallelTask2(callback) {
+        function serialTask1() {
+            var todo = new Do(2);
+            todo.error(callback);
+            todo.success(serialTask2);
+            parallelTask1(todo.done);
+            parallelTask2(todo.done);
+        }
+
+        function serialTask2() {
+            var todo = new Do(2);
+            todo.error(callback);
+            todo.success(callback);
+            parallelTask1(todo.done);
+            parallelTask2(todo.done);
+        }
+
+        serialTask1();
+    }
+
+    parallelTask1(todo.done);
+    parallelTask2(todo.done);
 
 ### Express application
 

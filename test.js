@@ -11,11 +11,11 @@ a.strictEqual(new Do(5).dec(), 4, 'dec -1');
 a.strictEqual(new Do(5).dec(3), 2, 'inc -3');
 
 a.throws(function() {
-    new Do().done(new Error());
+    new Do(1).done(new Error());
 }, Error, 'throw if error is passed and error callback not defined.');
 
 a.throws(function() {
-    new Do().done();
+    new Do(1).done();
 }, Error, 'throw if no error is passed, tasks are done, but no success callback defined');
 
 new Do(5).error(function(err) {
@@ -30,7 +30,7 @@ new Do(5).success(function() {
     var error,
         success;
 
-    new Do()
+    new Do(1)
         .error(function(err) {
             error = err;
         })
@@ -46,7 +46,7 @@ new Do(5).success(function() {
 (function() {
     var success;
 
-    new Do()
+    new Do(1)
         .error(function() {})
         .success(function() {
             success = true;
@@ -94,7 +94,7 @@ new Do(5).success(function() {
 }());
 
 (function() {
-    new Do()
+    new Do(1)
         .success(function(){})
         .done.call({});
 
