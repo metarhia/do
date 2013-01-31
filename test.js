@@ -1,69 +1,103 @@
 var a = require('assert'),
     Do = require('./');
 
-a.strictEqual(new Do(5).value, 5, 'amount');
 a.equal(new Do(5), 5, 'valueOf');
+a.equal(new Do().amount(5), 5, 'set amount');
+a.strictEqual(new Do(5).amount(), 5, 'get amount');
 a.strictEqual(new Do(5).inc(), 6, 'inc +1');
 a.strictEqual(new Do(5).inc(3), 8, 'inc +3');
 a.strictEqual(new Do(5).dec(), 4, 'dec -1');
 a.strictEqual(new Do(5).dec(3), 2, 'inc -3');
-a.strictEqual(new Do().set(5), 5, 'set');
-a.strictEqual(new Do(5).get(), 5, 'get');
+
+a.throws(function() {
+    new Do().done(new Error());
+}, Error, 'throw if error is passed and error callback not defined.');
+
+a.throws(function() {
+    new Do().done();
+}, Error, 'throw if no error is passed, tasks are done, but no success callback defined');
+
 new Do(5).error(function(err) {
     a.ok(err instanceof Error, 'error callback');
 }).error(new Error());
+
 new Do(5).success(function() {
     a.ok(true, 'success callback');
 }).success(new Error());
-new Do(1).done(function(err) {
-    a.equal(err, null, 'done callback without error');
-}).done();
-new Do(5).done(function(err) {
-    a.ok(err instanceof Error, 'done callback with error');
-}).done(new Error());
+
 (function() {
-    var todo = new Do(3),
-        called = 0,
+    var error,
         success;
 
-    todo.success(function() {
-        success = true;
-    });
+    new Do()
+        .error(function(err) {
+            error = err;
+        })
+        .success(function() {
+            success = true;
+        }).done().done();
 
-    todo.done(function(err) {
-        called++;
-        a.equal(err, null, 'done callback without error');
-    });
-
-    todo.done().done().done();
-    a.ok(success, 'success called');
-    a.equal(called, 1, 'done called once');
+    a.ok(error instanceof Error, 'error callback called');
+    a.equal(error.message, 'Done called more times than defined.')
+    a.ok(success, 'success callback called');
 }());
+
 (function() {
-    var todo = new Do(3),
-        doneCalled = 0,
-        successCalled = 0,
-        errorCalled = 0;
+    var success;
 
-    todo.success(function() {
-        successCalled++;
-    });
+    new Do()
+        .error(function() {})
+        .success(function() {
+            success = true;
+        }).done(new Error());
 
-    todo.done(function(err) {
-        doneCalled++;
-        a.ok(err instanceof Error, 'done callback error passed');
-    });
+    a.ok(!success, 'success callback should not be called if error happened');
+}());
 
-    todo.error(function(err) {
-        errorCalled++;
-        a.ok(err instanceof Error, 'error callback error passed');
-    });
+(function() {
+    var success
+        errors = 0;
 
-    todo.done(new Error()).done(new Error()).done(new Error());
+    new Do(2)
+        .error(function() {
+            errors++;
+        })
+        .success(function() {
+            success = true;
+        }).done(new Error()).done();
 
-    a.equal(doneCalled, 1, 'done called once');
-    a.equal(errorCalled, 3, 'error called 3 times');
-    a.equal(successCalled, 0, 'success called 0 times');
+    a.ok(!success, 'success callback should not be called if at least one error is happened');
+    a.equal(errors, 1, 'one error is happened');
+}());
+
+(function() {
+    var success = 0;
+
+    new Do(3)
+        .success(function() {
+            success++;
+        }).done().done().done();
+
+    a.equal(success, 1, 'success callback called once');
+}());
+
+(function() {
+    var success = 0;
+
+    new Do(3)
+        .success(function() {
+            success++;
+        }).done().done().done();
+
+    a.equal(success, 1, 'success callback called once');
+}());
+
+(function() {
+    new Do()
+        .success(function(){})
+        .done.call({});
+
+    a.ok(true, 'context is ensured');
 }());
 
 console.log('Passed successfully.');
