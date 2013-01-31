@@ -1,9 +1,7 @@
 var a = require('assert'),
     Do = require('./');
 
-
-a.equal(new Do(5), 5, 'valueOf');
-a.equal(new Do().amount(5), 5, 'set amount');
+a.equal(new Do().amount(5).amount(), 5, 'set amount');
 a.strictEqual(new Do(5).amount(), 5, 'get amount');
 a.strictEqual(new Do(5).inc(), 6, 'inc +1');
 a.strictEqual(new Do(5).inc(3), 8, 'inc +3');

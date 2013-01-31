@@ -48,20 +48,6 @@ Do.prototype.amount  = function(value) {
 };
 
 /**
- * Enable to cast the instance to the number of todos.
- *
- * Examples:
- *
- *   new Do(3) == 3; // true
- *
- * @return {Number} amount
- * @api public
- */
-Do.prototype.valueOf  = function() {
-    return this._amount;
-};
-
-/**
  * Increase amount of todos.
  *
  * Examles:

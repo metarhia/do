@@ -17,11 +17,11 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
 ```js
 // Create 1 todo
-var todo = new Do(1);
+var todo = new Do();
 // Create 3 todos.
 var todo = new Do(3);
 // without new statement
-var todo = Do(1);
+var todo = Do();
 ```
 
 ### Do#amount(value:Number?)
@@ -35,16 +35,6 @@ var todo = Do(1);
 todo.amount();
 // Set a new amount
 todo.amount(3);
-```
-
-### Do#valueOf()
-
-  Enable to cast the instance to the number of todos.
-
-  Examples:
-
-```js
-new Do(3) == 3; // true
 ```
 
 ### Do#inc(value:Number?)
