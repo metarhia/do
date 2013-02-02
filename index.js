@@ -63,7 +63,7 @@ Do.prototype.amount  = function(value) {
  */
 Do.prototype.inc  = function(value) {
     this._amount += value || 1;
-    return this._amount;
+    return this;
 };
 
 /**
@@ -82,7 +82,7 @@ Do.prototype.inc  = function(value) {
  */
 Do.prototype.dec  = function(value) {
     this._amount -= value || 1;
-    return this._amount;
+    return this;
 };
 
 /**

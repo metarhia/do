@@ -3,10 +3,10 @@ var a = require('assert'),
 
 a.equal(new Do().amount(5).amount(), 5, 'set amount');
 a.strictEqual(new Do(5).amount(), 5, 'get amount');
-a.strictEqual(new Do(5).inc(), 6, 'inc +1');
-a.strictEqual(new Do(5).inc(3), 8, 'inc +3');
-a.strictEqual(new Do(5).dec(), 4, 'dec -1');
-a.strictEqual(new Do(5).dec(3), 2, 'inc -3');
+a.strictEqual(new Do(5).inc().amount(), 6, 'inc +1');
+a.strictEqual(new Do(5).inc(3).amount(), 8, 'inc +3');
+a.strictEqual(new Do(5).dec().amount(), 4, 'dec -1');
+a.strictEqual(new Do(5).dec(3).amount(), 2, 'inc -3');
 
 a.throws(function() {
     new Do(1).done(new Error());
