@@ -12,7 +12,7 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 You need to specify "error" and "success" callbacks, otherwise Do will throw in this cases:
 
 1. Do#done is called with error param, but error callback is not defined.
-2. All todos are done, but success callback is not defined
+2. All todos are done, but success callback is not defined.
 
 
 ## Do()
@@ -86,10 +86,6 @@ todo.dec(3)
 // Define error callback.
 todo.error(function(err) {
     console.error(err);
-```
-
-
-```js
     // Ensure sending response only once.
     if (this.errors.length == 1) {
        req.send('Error')
@@ -101,9 +97,10 @@ todo.error(new Error());
 
 ## Do#success(fn:Function?)
 
-  Set an success callback or trigger a success.
-  If a todo is done without errors and success callback is defined it will be
-  called by Do#done only ONCE.
+  Set a success callback or trigger a success.
+
+  If all todos are done without errors - success callback will be called Do#done.
+  Success callback is called ONLY ONCE.
 
   Examples:
 

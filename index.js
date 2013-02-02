@@ -104,7 +104,6 @@ Do.prototype.dec  = function(value) {
  *   // Define error callback.
  *   todo.error(function(err) {
  *       console.error(err);
- *
  *       // Ensure sending response only once.
  *       if (this.errors.length == 1) {
  *          req.send('Error')
@@ -134,9 +133,9 @@ Do.prototype.error  = function(err) {
 };
 
 /**
- * Set an success callback or trigger a success.
- * If a todo is done without errors and success callback is defined it will be
- * called by Do#done only ONCE.
+ * Set a success callback or trigger success.
+ *
+ * If all todos are done without errors - success callback will be called ONCE by Do#done.
  *
  * Examples:
  *
