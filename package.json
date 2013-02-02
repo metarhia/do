@@ -1,11 +1,11 @@
 {
     "name": "do",
     "description": "The simplest way to manage callbacks",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "author": "Oleg Slobodskoi <oleg008@gmail.com>",
     "repository": {
         "type": "git",
-        "url": "http: //github.com/kof/do.git"
+        "url": "http://github.com/kof/do.git"
     },
     "keywords": ["async", "sync", "chain", "callbacks", "step", "control", "flow"],
     "engines": {"node": "*"},
