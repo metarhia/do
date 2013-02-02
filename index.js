@@ -39,7 +39,7 @@ module.exports = Do;
  * @api public
  */
 Do.prototype.amount  = function(value) {
-    if (value) {
+    if (value != null) {
         this._amount = value;
         return this;
     }
