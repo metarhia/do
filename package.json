@@ -7,7 +7,7 @@
         "type": "git",
         "url": "http: //github.com/kof/do.git"
     },
-    "keywords": ["async", "sync", "chain", "callbacks", "step"],
+    "keywords": ["async", "sync", "chain", "callbacks", "step", "control", "flow"],
     "engines": {"node": "*"},
     "scripts": {
         "test": "node test"
