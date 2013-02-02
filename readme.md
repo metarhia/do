@@ -97,9 +97,9 @@ todo.error(new Error());
 
 ## Do#success(fn:Function?)
 
-  Set a success callback or trigger a success.
+  Set a success callback or trigger success.
 
-  If all todos are done without errors - success callback will be called Do#done.
+  If all todos are done without errors - success callback will be called by Do#done.
   Success callback is called ONLY ONCE.
 
   Examples:

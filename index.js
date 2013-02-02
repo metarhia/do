@@ -135,7 +135,8 @@ Do.prototype.error  = function(err) {
 /**
  * Set a success callback or trigger success.
  *
- * If all todos are done without errors - success callback will be called ONCE by Do#done.
+ * If all todos are done without errors - success callback will be called by Do#done.
+ * Success callback is called ONLY ONCE.
  *
  * Examples:
  *
