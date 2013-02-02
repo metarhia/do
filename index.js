@@ -7,7 +7,7 @@
  *   var todo = new Do();
  *   // Create 3 todos.
  *   var todo = new Do(3);
- *   // without new statement
+ *   // Without a "new" statement.
  *   var todo = Do();
  *
  * @param {Number?} amount of todos
@@ -25,13 +25,21 @@ function Do(amount) {
 module.exports = Do;
 
 /**
+ * Accumulated errors.
+ *
+ * @api public
+ * @property errors
+ */
+Do.prototype.errors;
+
+/**
  * Setter/getter for amount of todos.
  *
  * Examples:
  *
  *   // Get the current amount.
  *   todo.amount();
- *   // Set a new amount
+ *   // Set a new amount.
  *   todo.amount(3);
  *
  * @param {Number?} value - if passed works as a setter, otherwise as a getter.
@@ -52,9 +60,9 @@ Do.prototype.amount  = function(value) {
  *
  * Examles:
  *
- *   // add 1 more
+ *   // Add 1 todo.
  *   todo.inc();
- *   // add 3 more
+ *   // Add 3 todos.
  *   todo.inc(3)
  *
  * @param {Number?} value - add the value to the current amount or just 1.
@@ -71,9 +79,9 @@ Do.prototype.inc  = function(value) {
  *
  * Examples:
  *
- *   // remove 1
+ *   // Reduce at 1 todo.
  *   todo.dec();
- *   // remove 3
+ *   // Reduce at 3 todos.
  *   todo.dec(3)
  *
  * @param {Number?} value - substitute the value from the current amount or just 1.
@@ -87,15 +95,22 @@ Do.prototype.dec  = function(value) {
 
 /**
  * Set an error callback or trigger an error.
- * If an error is passed to the Do#done and the error callback is defined, it is
- * called every time.
+ *
+ * Error callback is called EVERY time an error is passed to Do#done or Do#error.
+ * If you send an http response in the error handler, ensure to do it only once.
  *
  * Examples:
  *
- *   // define error callback
+ *   // Define error callback.
  *   todo.error(function(err) {
+ *       console.error(err);
+ *
+ *       // Ensure sending response only once.
+ *       if (this.errors.length == 1) {
+ *          req.send('Error')
+ *       }
  *   });
- *   // trigger an error manually
+ *   // Trigger an error manually.
  *   todo.error(new Error());
  *
  * @param {Function|Error?} err - if function passed, it is used as an error callback,
@@ -120,18 +135,20 @@ Do.prototype.error  = function(err) {
 
 /**
  * Set an success callback or trigger a success.
- * If a todo is done without errors and success callback is defined it will be called by Do#done.
+ * If a todo is done without errors and success callback is defined it will be
+ * called by Do#done only ONCE.
  *
  * Examples:
  *
- *   // define success callback
+ *   // Define a success callback.
  *   todo.success(function() {
+ *      res.send('Success');
  *   });
- *   // trigger success manually
+ *   // Trigger success manually.
  *   todo.success();
  *
  * @param {Function?} fn - if function passed, it is used as success callback,
- *     otherwise success callback defined before will be called.
+ *     otherwise success callback defined before will be invoked.
  * @return {Do} instance
  * @api public
  */

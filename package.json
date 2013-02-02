@@ -1,7 +1,7 @@
 {
     "name": "do",
     "description": "The simplest way to manage callbacks",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "author": "Oleg Slobodskoi <oleg008@gmail.com>",
     "repository": {
         "type": "git",
