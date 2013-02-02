@@ -17,11 +17,11 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
 ```js
 // Create 1 todo
-var todo = new Do();
+var todo = new Do(1);
 // Create 3 todos.
 var todo = new Do(3);
 // without new statement
-var todo = Do();
+var todo = Do(1);
 ```
 
 ### Do#amount(value:Number?)
