@@ -11,8 +11,8 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
 You need to specify "error" and "success" callbacks, otherwise Do will throw in this cases:
 
-1. An error is passed but you haven't defined an error callback.
-2. All todos are done, but you haven't defined a success callback.
+1. Do#done is called with error param, but error callback is not defined.
+2. All todos are done, but success callback is not defined
 
 
 ## Do()
