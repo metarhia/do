@@ -1,7 +1,7 @@
 {
     "name": "do",
-    "description": "The simplest way to manage callbacks",
-    "version": "0.0.8",
+    "description": "The simplest way to manage callbacks.",
+    "version": "0.1.0",
     "author": "Oleg Slobodskoi <oleg008@gmail.com>",
     "repository": {
         "type": "git",
@@ -9,6 +9,9 @@
     },
     "keywords": ["async", "sync", "chain", "callbacks", "step", "control", "flow"],
     "engines": {"node": "*"},
+    "devDependencies": {
+        "dox": "0.4.2"
+    },
     "scripts": {
         "test": "node test"
     },

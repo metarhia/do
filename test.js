@@ -37,7 +37,7 @@ new Do(5).success(function() {
         }).done().done();
 
     a.ok(error instanceof Error, 'error callback called');
-    a.equal(error.message, 'Done called more times than defined.')
+    a.equal(error.message, 'Do#done called more times than defined.')
     a.ok(success, 'success callback called');
 }());
 
@@ -81,14 +81,45 @@ new Do(5).success(function() {
 }());
 
 (function() {
-    var success = 0;
+    var success = 0,
+        errors = 0,
+        error;
 
-    new Do(3)
+    new Do(1)
+        .error(function(err) {
+            errors++;
+            error = err;
+        })
         .success(function() {
             success++;
-        }).done().done().done();
+        })
+        .success()
+        .done()
 
     a.equal(success, 1, 'success callback called once');
+    a.equal(errors, 1, 'error triggered');
+    a.equal(error.message, 'Do#success called more than once.');
+}());
+
+(function() {
+    var success = 0,
+        errors = 0,
+        error;
+
+    new Do(1)
+        .error(function(err) {
+            errors++;
+            error = err;
+        })
+        .success(function() {
+            success++;
+        })
+        .success()
+        .success();
+
+    a.equal(success, 1, 'success callback called once');
+    a.equal(errors, 1, 'error triggered');
+    a.equal(error.message, 'Do#success called more than once.');
 }());
 
 (function() {

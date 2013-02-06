@@ -46,7 +46,7 @@ Do.prototype.errors;
  * @return {Number|Do} amount or instance
  * @api public
  */
-Do.prototype.amount  = function(value) {
+Do.prototype.amount = function(value) {
     if (value != null) {
         this._amount = value;
         return this;
@@ -69,7 +69,7 @@ Do.prototype.amount  = function(value) {
  * @return {Number} amount
  * @api public
  */
-Do.prototype.inc  = function(value) {
+Do.prototype.inc = function(value) {
     this._amount += value || 1;
     return this;
 };
@@ -88,7 +88,7 @@ Do.prototype.inc  = function(value) {
  * @return {Number} amount
  * @api public
  */
-Do.prototype.dec  = function(value) {
+Do.prototype.dec = function(value) {
     this._amount -= value || 1;
     return this;
 };
@@ -117,7 +117,7 @@ Do.prototype.dec  = function(value) {
  * @return {Do} instance
  * @api public
  */
-Do.prototype.error  = function(err) {
+Do.prototype.error = function(err) {
     if (!err) {
         return this;
     }
@@ -152,11 +152,16 @@ Do.prototype.error  = function(err) {
  * @return {Do} instance
  * @api public
  */
-Do.prototype.success  = function(fn) {
+Do.prototype.success = function(fn) {
     if (typeof fn == 'function') {
         this._success = fn;
     } else {
-        this._success.apply(this, arguments);
+        if (this._successCalled) {
+            this.error(new Error('Do#success called more than once.'));
+        } else if (!this.errors.length) {
+            this._successCalled = true;
+            this._success.apply(this, arguments);
+        }
     }
 
     return this;
@@ -175,13 +180,12 @@ Do.prototype.success  = function(fn) {
  *   // context of `todo.done` is ensured.
  *   someTask(todo.done);
  *
- *
  * @param {Error?} err - if error passed, error callback will be called,
  *     otherwise if all todos without errors are done, success callback will be called.
  * @return {Do} instance
  * @api public
  */
-Do.prototype.done  = function(err) {
+Do.prototype.done = function(err) {
     if (err) {
         this.error(err);
         return this;
@@ -194,11 +198,9 @@ Do.prototype.done  = function(err) {
     this._amount--;
 
     if (this._amount === 0) {
-        if (!this.errors.length) {
-            this._success.apply(this, arguments);
-        }
+        this.success.apply(this, arguments);
     } else if (this._amount < 0) {
-        this.error(new Error('Done called more times than defined.'));
+        this.error(new Error('Do#done called more times than defined.'));
     }
 
     return this;
