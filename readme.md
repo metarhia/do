@@ -12,11 +12,14 @@ You need to specify "error" and "success" callbacks, otherwise "Do" will throw i
 1. Do#done is called with error param, but error callback is not defined.
 2. All todos are done, but success callback is not defined.
 
+
     var Do = require('do');
     var todo = Do(1);
     todo.error(error);
     todo.error(success);
     todo.done();
+
+## Api
 
 - [Do()](#do)
   - [Do#amount()](#doamountvaluenumber)
@@ -26,7 +29,7 @@ You need to specify "error" and "success" callbacks, otherwise "Do" will throw i
   - [Do#success()](#dosuccessfnfunction)
   - [Do#done()](#dodoneerrerror)
 
-## Do()
+### Do()
 
   Do constructor.
   
