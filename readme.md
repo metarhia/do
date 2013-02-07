@@ -13,11 +13,11 @@ You need to specify "error" and "success" callbacks, otherwise "Do" will throw i
 2. All todos are done, but success callback is not defined.
 
 
-    var Do = require('do');
-    var todo = Do(1);
-    todo.error(error);
-    todo.error(success);
-    todo.done();
+        var Do = require('do');
+        var todo = Do(1);
+        todo.error(error);
+        todo.error(success);
+        todo.done();
 
 ## Api
 
@@ -32,9 +32,9 @@ You need to specify "error" and "success" callbacks, otherwise "Do" will throw i
 ### Do()
 
   Do constructor.
-  
+
   Examples:
-  
+
 ```js
 // Create 1 todo
 var todo = new Do();
@@ -47,9 +47,9 @@ var todo = Do();
 ## Do#amount(value:Number?)
 
   Setter/getter for amount of todos.
-  
+
   Examples:
-  
+
 ```js
 // Get the current amount.
 todo.amount();
@@ -60,9 +60,9 @@ todo.amount(3);
 ## Do#inc(value:Number?)
 
   Increase amount of todos.
-  
+
   Examles:
-  
+
 ```js
 // Add 1 todo.
 todo.inc();
@@ -73,9 +73,9 @@ todo.inc(3)
 ## Do#dec(value:Number?)
 
   Decrease amount of todos.
-  
+
   Examples:
-  
+
 ```js
 // Reduce at 1 todo.
 todo.dec();
@@ -86,12 +86,12 @@ todo.dec(3)
 ## Do#error(err:Function|Error?)
 
   Set an error callback or trigger an error.
-  
+
   Error callback is called EVERY time an error is passed to Do#done or Do#error.
   If you send an http response in the error handler, ensure to do it only once.
-  
+
   Examples:
-  
+
 ```js
 // Define error callback.
 todo.error(function(err) {
@@ -108,12 +108,12 @@ todo.error(new Error());
 ## Do#success(fn:Function?)
 
   Set a success callback or trigger success.
-  
+
   If all todos are done without errors - success callback will be called by Do#done.
   Success callback is called ONLY ONCE.
-  
+
   Examples:
-  
+
 ```js
 // Define a success callback.
 todo.success(function() {
@@ -127,9 +127,9 @@ todo.success();
 
   Indicate a done task. If an error is passed as first parameter - error will
   be triggered.
-  
+
   Examples:
-  
+
 ```js
 // with error
 todo.done(err);
