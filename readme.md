@@ -13,11 +13,11 @@ You need to specify "error" and "success" callbacks, otherwise "Do" will throw i
 2. All todos are done, but success callback is not defined.
 
 
-        var Do = require('do');
-        var todo = Do(1);
-        todo.error(error);
-        todo.success(success);
-        todo.done();
+    var Do = require('do');
+    var todo = Do(1);
+    todo.error(error);
+    todo.error(success);
+    todo.done();
 
 ## Api
 
@@ -32,9 +32,9 @@ You need to specify "error" and "success" callbacks, otherwise "Do" will throw i
 ### Do()
 
   Do constructor.
-
+  
   Examples:
-
+  
 ```js
 // Create 1 todo
 var todo = new Do();
@@ -47,9 +47,9 @@ var todo = Do();
 ## Do#amount(value:Number?)
 
   Setter/getter for amount of todos.
-
+  
   Examples:
-
+  
 ```js
 // Get the current amount.
 todo.amount();
@@ -59,10 +59,10 @@ todo.amount(3);
 
 ## Do#inc(value:Number?)
 
-  Increase amount of todos.
-
+  Increment amount of todos.
+  
   Examles:
-
+  
 ```js
 // Add 1 todo.
 todo.inc();
@@ -72,10 +72,10 @@ todo.inc(3)
 
 ## Do#dec(value:Number?)
 
-  Decrease amount of todos.
-
+  Decrement amount of todos.
+  
   Examples:
-
+  
 ```js
 // Reduce at 1 todo.
 todo.dec();
@@ -86,12 +86,12 @@ todo.dec(3)
 ## Do#error(err:Function|Error?)
 
   Set an error callback or trigger an error.
-
+  
   Error callback is called EVERY time an error is passed to Do#done or Do#error.
   If you send an http response in the error handler, ensure to do it only once.
-
+  
   Examples:
-
+  
 ```js
 // Define error callback.
 todo.error(function(err) {
@@ -108,12 +108,12 @@ todo.error(new Error());
 ## Do#success(fn:Function?)
 
   Set a success callback or trigger success.
-
+  
   If all todos are done without errors - success callback will be called by Do#done.
   Success callback is called ONLY ONCE.
-
+  
   Examples:
-
+  
 ```js
 // Define a success callback.
 todo.success(function() {
@@ -127,9 +127,9 @@ todo.success();
 
   Indicate a done task. If an error is passed as first parameter - error will
   be triggered.
-
+  
   Examples:
-
+  
 ```js
 // with error
 todo.done(err);
@@ -137,6 +137,32 @@ todo.done(err);
 todo.done();
 // context of `todo.done` is ensured.
 someTask(todo.done);
+```
+
+  
+  Also it solves another issue with callbacks. If we pass a function reference
+  to some other function we never know if the other function could call the callback
+  synchronously. F.e. in case there is nothing todo in async manner. In that case
+  and in case of conditional incrementation/decrementation of todos amount it can
+  happen that `Do#done` is called more than once.
+  
+  Example:
+  
+```js
+var todo = Do();
+todo.error(error);
+todo.success(success);
+if (a == 1) {
+    todo.inc();
+    // If this function calls `done` callback synchronously - success callback
+    // will be called as there is nothing to do any more and the second case is
+    // not executed yet.
+    someAyncFn(todo.done);
+}
+if (a == 2) {
+    todo.inc();
+    someAyncFn(todo.done);
+}
 ```
 
 ## Examples

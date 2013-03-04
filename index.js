@@ -56,7 +56,7 @@ Do.prototype.amount = function(value) {
 };
 
 /**
- * Increase amount of todos.
+ * Increment amount of todos.
  *
  * Examles:
  *
@@ -75,7 +75,7 @@ Do.prototype.inc = function(value) {
 };
 
 /**
- * Decrease amount of todos.
+ * Decrement amount of todos.
  *
  * Examples:
  *
@@ -180,19 +180,59 @@ Do.prototype.success = function(fn) {
  *   // context of `todo.done` is ensured.
  *   someTask(todo.done);
  *
+ * Also it solves another issue with callbacks. If we pass a function reference
+ * to some other function we never know if the other function could call the callback
+ * synchronously. F.e. in case there is nothing todo in async manner. In that case
+ * and in case of conditional incrementation/decrementation of todos amount it can
+ * happen that `Do#done` is called more than once.
+ *
+ * Example:
+ *
+ *   var todo = Do();
+ *   todo.error(error);
+ *   todo.success(success);
+ *   if (a == 1) {
+ *       todo.inc();
+ *       // If this function calls `done` callback synchronously - success callback
+ *       // will be called as there is nothing to do any more and the second case is
+ *       // not executed yet.
+ *       someAyncFn(todo.done);
+ *   }
+ *   if (a == 2) {
+ *       todo.inc();
+ *       someAyncFn(todo.done);
+ *   }
+ *
  * @param {Error?} err - if error passed, error callback will be called,
  *     otherwise if all todos without errors are done, success callback will be called.
  * @return {Do} instance
  * @api public
  */
-Do.prototype.done = function(err) {
+Do.prototype.done = function() {
+    var self = this,
+        args = arguments;
+
+    if (!this._error || !this._success) {
+        throw new Error('Either "error" or "success" callback is not defined.');
+    }
+
+    process.nextTick(function() {
+        self._done.apply(self, args);
+    });
+
+    return this;
+};
+
+/**
+ * Call success or error callback.
+ *
+ * @see Do#done
+ * @api private
+ */
+Do.prototype._done = function(err) {
     if (err) {
         this.error(err);
         return this;
-    }
-
-    if (this._amount == null) {
-        throw new Error('Bad context.');
     }
 
     this._amount--;
@@ -205,4 +245,3 @@ Do.prototype.done = function(err) {
 
     return this;
 };
-

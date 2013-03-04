@@ -1,7 +1,7 @@
 {
     "name": "do",
     "description": "The simplest way to manage callbacks.",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "author": "Oleg Slobodskoi <oleg008@gmail.com>",
     "repository": {
         "type": "git",
@@ -10,10 +10,11 @@
     "keywords": ["async", "sync", "chain", "callbacks", "step", "control", "flow"],
     "engines": {"node": "*"},
     "devDependencies": {
-        "dox": "0.4.2"
+        "dox": "0.4.2",
+        "qunit": "0.5.15"
     },
     "scripts": {
-        "test": "node test"
+        "test": "node_modules/qunit/bin/cli.js -c Do:./index.js -t ./test.js"
     },
     "licenses": [
         {
