@@ -7,7 +7,7 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
 ## Usage
 
-You need to specify "error" and "success" callbacks, otherwise "Do" will throw an error.
+ You need to specify "error" and "success" callbacks, otherwise "Do" will throw an error.
 
   var Do = require('do');
   var todo = Do(1);
