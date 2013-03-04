@@ -7,17 +7,13 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
 ## Usage
 
-You need to specify "error" and "success" callbacks, otherwise "Do" will throw in follwing cases:
+You need to specify "error" and "success" callbacks, otherwise "Do" will throw an error.
 
-1. Do#done is called with error param, but error callback is not defined.
-2. All todos are done, but success callback is not defined.
-
-
-    var Do = require('do');
-    var todo = Do(1);
-    todo.error(error);
-    todo.error(success);
-    todo.done();
+  var Do = require('do');
+  var todo = Do(1);
+  todo.error(error);
+  todo.error(success);
+  todo.done();
 
 ## Api
 

@@ -7,17 +7,13 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
 ## Usage
 
-You need to specify "error" and "success" callbacks, otherwise "Do" will throw in follwing cases:
+You need to specify "error" and "success" callbacks, otherwise "Do" will throw an error.
 
-1. Do#done is called with error param, but error callback is not defined.
-2. All todos are done, but success callback is not defined.
-
-
-    var Do = require('do');
-    var todo = Do(1);
-    todo.error(error);
-    todo.error(success);
-    todo.done();
+  var Do = require('do');
+  var todo = Do(1);
+  todo.error(error);
+  todo.error(success);
+  todo.done();
 
 ## Api
 
@@ -141,9 +137,9 @@ someTask(todo.done);
 
   
   Also it solves another issue with callbacks. If we pass a function reference
-  to some other function we never know if the other function could call the callback
-  synchronously. F.e. in case there is nothing todo in async manner. In that case
-  and in case of conditional incrementation/decrementation of todos amount it can
+  to some other function - we never know if the other function could call the callback
+  synchronously f.e. in case there is nothing todo in async manner. In that case
+  and in case of conditional incrementation/decrementation of todos amount, it can
   happen that `Do#done` is called more than once.
   
   Example:
@@ -152,11 +148,16 @@ someTask(todo.done);
 var todo = Do();
 todo.error(error);
 todo.success(success);
+function someAyncFn(callback) {
+   if (nothingTodo) {
+       return callback();
+   }
+}
 if (a == 1) {
     todo.inc();
     // If this function calls `done` callback synchronously - success callback
-    // will be called as there is nothing to do any more and the second case is
-    // not executed yet.
+    // will be called as there is nothing to do any more and the case "a == 2"
+    // is not executed yet.
     someAyncFn(todo.done);
 }
 if (a == 2) {
