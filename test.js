@@ -178,3 +178,35 @@ test('invoking success triggers complete', function() {
             start();
         }).success();
 });
+
+test('no todos and .success call', function() {
+    expect(1);
+    stop();
+
+    new Do()
+        .error(function() {
+            ok(false, 'no error should happen');
+            start();
+        })
+        .success(function() {
+            ok(true, 'success called');
+            start();
+        })
+        .success();
+});
+
+test('no todos and .complete call', function() {
+    expect(1);
+    stop();
+
+    new Do()
+        .error(function() {
+            ok(false, 'no error should happen');
+            start();
+        })
+        .complete(function() {
+            ok(true, 'complete called');
+            start();
+        })
+        .complete();
+});

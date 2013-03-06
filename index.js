@@ -160,6 +160,11 @@ Do.prototype.success = function(fn) {
             this.__error(new Error('Do#success called more than once.'));
         } else {
             this._successCalled = true;
+
+            // If amount is <= 0, we will get an error in _execCallbacks.
+            if (this._amount < 1) {
+                this._amount = 1;
+            }
             this._execCallbacks.apply(this, arguments);
         }
     }
@@ -196,6 +201,10 @@ Do.prototype.complete = function(fn) {
             this.__error(new Error('Do#complete called more than once.'));
         } else {
             this._completeCalled = true;
+            // If amount is <= 0, we will get an error in _execCallbacks.
+            if (this._amount < 1) {
+                this._amount = 1;
+            }
             this._execCallbacks.apply(this, arguments);
         }
 
