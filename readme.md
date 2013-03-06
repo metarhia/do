@@ -7,13 +7,17 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
 ## Usage
 
- You need to specify "error" and "success" callbacks, otherwise "Do" will throw an error.
-
+ You need to specify "error" + "success" or "complete" callback, otherwise "Do" will throw an error.
 
     var Do = require('do');
     var todo = Do(1);
-    todo.error(error);
-    todo.error(success);
+    // use success and error callbacks
+    todo.error();
+    todo.success(success);
+    // or use complete callback
+    todo.complete(function() {
+        console.log(this.errors);
+    });
     todo.done();
 
 ## Api
@@ -24,6 +28,7 @@ If you don't want to use all the async/chain libraries but just want a reliable 
   - [Do#dec()](#dodecvaluenumber)
   - [Do#error()](#doerrorerrfunctionerror)
   - [Do#success()](#dosuccessfnfunction)
+  - [Do#complete()](#docompletefnfunction)
   - [Do#done()](#dodoneerrerror)
 
 ### Do()
@@ -84,18 +89,21 @@ todo.dec(3)
 
   Set an error callback or trigger an error.
   
-  Error callback is called EVERY time an error is passed to Do#done or Do#error.
-  If you send an http response in the error handler, ensure to do it only once.
+  Error callback is called EVERY time an error is passed to `Do#done` or `Do#error`.
+  If you send an http response inside of the `error` handler, ensure to do it
+  only once or use `complete` callback.
   
   Examples:
   
 ```js
 // Define error callback.
+var send;
 todo.error(function(err) {
     console.error(err);
     // Ensure sending response only once.
-    if (this.errors.length == 1) {
-       req.send('Error')
+    if (!send) {
+       req.send('Error');
+       send = true;
     }
 });
 // Trigger an error manually.
@@ -118,6 +126,24 @@ todo.success(function() {
 });
 // Trigger success manually.
 todo.success();
+```
+
+## Do#complete(fn:Function?)
+
+  Set a complete callback or trigger complete.
+  
+  Complete callback is always called ONCE if it is defined independent of errors.
+  
+  Examples:
+  
+```js
+// Define a complete callback.
+todo.complete(function() {
+   console.error(this.errors);
+   res.send('Complete');
+});
+// Trigger complete manually.
+todo.complete();
 ```
 
 ## Do#done(err:Error?)

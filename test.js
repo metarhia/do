@@ -10,6 +10,9 @@ test('get/set/inc/dec amount', function() {
 });
 
 test('throw if callbacks are not defined', function() {
+    stop();
+    expect(3);
+
     throws(function() {
         new Do(1).done(new Error());
     }, Error, 'throw if error is passed and error callback not defined.');
@@ -17,6 +20,13 @@ test('throw if callbacks are not defined', function() {
     throws(function() {
         new Do(1).done();
     }, Error, 'throw if no error is passed, tasks are done, but no success callback defined');
+
+    new Do(1)
+        .complete(function() {
+            equal(this.errors.length, 0, 'do not throws if complete callback is defined');
+            start();
+        })
+        .done();
 });
 
 test('done called more times than defined', function() {
@@ -26,7 +36,7 @@ test('done called more times than defined', function() {
     new Do(1)
         .error(function(err) {
             ok(err instanceof Error, 'error callback called');
-            equal(err.message, 'Do#done called more times than defined.')
+            equal(err.message, 'Do#done called more times than defined.', 'correct error message');
         })
         .success(function() {
             ok(true, 'success callback called');
@@ -47,8 +57,8 @@ test('#1 no success called if error is happened', function() {
         }).done(new Error());
 });
 
-test('#1 no success called if error is happened', function() {
-    expect(1);
+test('#2 no success called if error is happened', function() {
+    expect(2);
     stop();
     new Do(1)
         .error(function(err) {
@@ -56,7 +66,7 @@ test('#1 no success called if error is happened', function() {
             start();
         })
         .success(function() {
-            ok(true, 'success callback should not be called if error happened');
+            ok(false, 'success callback should not be called if error happened');
         }).done(new Error()).done();
 });
 
@@ -72,6 +82,7 @@ test('success is called only once using Do#done', function() {
         }).done().done().done();
 });
 
+
 test('success is called only once using Do#done & Do#success', function() {
     expect(3);
     stop();
@@ -79,11 +90,11 @@ test('success is called only once using Do#done & Do#success', function() {
     new Do(1)
         .error(function(err) {
             ok(err instanceof Error, 'error triggered');
-            equal(err.message, 'Do#success called more than once.');
+            equal(err.message, 'Do#done called more times than defined.', 'correct error message');
+            start();
         })
         .success(function() {
             ok(true, 'success callback called once');
-            start();
         }).success().done();
 });
 
@@ -94,11 +105,76 @@ test('success is called only once using Do#success', function() {
     new Do(1)
         .error(function(err) {
             ok(err instanceof Error, 'error triggered');
-            equal(err.message, 'Do#success called more than once.');
+            equal(err.message, 'Do#success called more than once.', 'correct error message');
+            start();
         })
         .success(function() {
             ok(true, 'success callback called once');
-            start();
         }).success().success();
 });
 
+test('complete called without errors and without success/error callbacks', function() {
+    expect(1);
+    stop();
+
+    new Do(1).complete(function() {
+        equal(this.errors.length, 0, 'complete called without errors');
+        start();
+    }).done();
+});
+
+test('complete called without errors with success callbacks', function() {
+    expect(2);
+    stop();
+
+    new Do(1)
+        .success(function() {
+            ok(true, 'success called');
+        })
+        .complete(function() {
+            equal(this.errors.length, 0, 'complete called without errors');
+            start();
+        }).done();
+});
+
+test('complete called with error', function() {
+    expect(2);
+    stop();
+
+    new Do(1)
+        .error(function(err) {
+            ok(err instanceof Error, 'error callback got an error')
+        })
+        .complete(function() {
+            equal(this.errors.length, 1, 'complete called with error');
+            start();
+        }).done(new Error());
+});
+
+test('invoke complete directly', function() {
+    expect(2);
+    stop();
+
+    new Do(1)
+        .success(function() {
+            ok(true, 'success called on complete');
+        })
+        .complete(function() {
+            equal(this.errors.length, 0, 'complete called without errors');
+            start();
+        }).complete();
+});
+
+test('invoking success triggers complete', function() {
+    expect(2);
+    stop();
+
+    new Do(1)
+        .success(function() {
+            ok(true, 'success called on complete');
+        })
+        .complete(function() {
+            equal(this.errors.length, 0, 'complete called without errors');
+            start();
+        }).success();
+});

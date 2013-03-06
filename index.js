@@ -96,17 +96,20 @@ Do.prototype.dec = function(value) {
 /**
  * Set an error callback or trigger an error.
  *
- * Error callback is called EVERY time an error is passed to Do#done or Do#error.
- * If you send an http response in the error handler, ensure to do it only once.
+ * Error callback is called EVERY time an error is passed to `Do#done` or `Do#error`.
+ * If you send an http response inside of the `error` handler, ensure to do it
+ * only once or use `complete` callback.
  *
  * Examples:
  *
  *   // Define error callback.
+ *   var send;
  *   todo.error(function(err) {
  *       console.error(err);
  *       // Ensure sending response only once.
- *       if (this.errors.length == 1) {
- *          req.send('Error')
+ *       if (!send) {
+ *          req.send('Error');
+ *          send = true;
  *       }
  *   });
  *   // Trigger an error manually.
@@ -118,15 +121,11 @@ Do.prototype.dec = function(value) {
  * @api public
  */
 Do.prototype.error = function(err) {
-    if (!err) {
-        return this;
-    }
-
     if (typeof err == 'function') {
         this._error = err;
-    } else {
-        this.errors.push(err);
-        this._error.apply(this, arguments);
+    } else if (err) {
+        this._validateCallbacks();
+        this._execCallbacks.apply(this, arguments);
     }
 
     return this;
@@ -148,7 +147,7 @@ Do.prototype.error = function(err) {
  *   todo.success();
  *
  * @param {Function?} fn - if function passed, it is used as success callback,
- *     otherwise success callback defined before will be invoked.
+ *     otherwise, success callback defined before, will be invoked.
  * @return {Do} instance
  * @api public
  */
@@ -156,12 +155,50 @@ Do.prototype.success = function(fn) {
     if (typeof fn == 'function') {
         this._success = fn;
     } else {
+        this._validateCallbacks();
         if (this._successCalled) {
-            this.error(new Error('Do#success called more than once.'));
-        } else if (!this.errors.length) {
+            this.__error(new Error('Do#success called more than once.'));
+        } else {
             this._successCalled = true;
-            this._success.apply(this, arguments);
+            this._execCallbacks.apply(this, arguments);
         }
+    }
+
+    return this;
+};
+
+/**
+ * Set a complete callback or trigger complete.
+ *
+ * Complete callback is always called ONCE if it is defined independent of errors.
+ *
+ * Examples:
+ *
+ *   // Define a complete callback.
+ *   todo.complete(function() {
+ *      console.error(this.errors);
+ *      res.send('Complete');
+ *   });
+ *   // Trigger complete manually.
+ *   todo.complete();
+ *
+ * @param {Function?} fn - if function passed, it is used as complete callback,
+ *     otherwise, complete callback defined before, will be invoked.
+ * @return {Do} instance
+ * @api public
+ */
+Do.prototype.complete = function(fn) {
+    if (typeof fn == 'function') {
+        this._complete = fn;
+    } else {
+        this._validateCallbacks();
+        if (this._completeCalled) {
+            this.__error(new Error('Do#complete called more than once.'));
+        } else {
+            this._completeCalled = true;
+            this._execCallbacks.apply(this, arguments);
+        }
+
     }
 
     return this;
@@ -217,35 +254,64 @@ Do.prototype.done = function() {
     var self = this,
         args = arguments;
 
-    if (!this._error || !this._success) {
-        throw new Error('Either "error" or "success" callback is not defined.');
-    }
+    this._validateCallbacks();
 
     process.nextTick(function() {
-        self._done.apply(self, args);
+        self._execCallbacks.apply(self, args);
     });
 
     return this;
 };
 
 /**
- * Call success or error callback.
+ * Execute success/error/complete callbacks.
  *
- * @see Do#done
  * @api private
  */
-Do.prototype._done = function(err) {
-    if (err) {
-        this.error(err);
-        return this;
-    }
-
+Do.prototype._execCallbacks = function() {
     this._amount--;
 
+    this.__error.apply(this, arguments);
+
     if (this._amount === 0) {
-        this.success.apply(this, arguments);
+        if (!this.errors.length && this._success) {
+            this._success.apply(this, arguments);
+        }
+        if (this._complete) {
+            this._complete.apply(this, arguments);
+        }
     } else if (this._amount < 0) {
-        this.error(new Error('Do#done called more times than defined.'));
+        this.__error(new Error('Do#done called more times than defined.'));
+    }
+
+    return this;
+};
+
+/**
+ * Execute error callback if passed.
+ *
+ * @param {Error?} err
+ * @api private
+ */
+Do.prototype.__error = function(err) {
+    if (err) {
+        this.errors.push(err);
+        if (this._error) {
+            this._error.apply(this, arguments);
+        }
+    }
+
+    return this;
+};
+
+/**
+ * Check if proper callbacks are defined, throw if not.
+ *
+ * @api private
+ */
+Do.prototype._validateCallbacks = function() {
+    if (!this._complete && !(this._error && this._success)) {
+        throw new Error('Either "error" and "success" or "complete" callback needs to be defined.');
     }
 
     return this;
