@@ -36,7 +36,7 @@ test('done called more times than defined', function() {
     new Do(1)
         .error(function(err) {
             ok(err instanceof Error, 'error callback called');
-            equal(err.message, 'Do#done called more times than defined.', 'correct error message');
+            equal(err.message, 'Do#done called more times than expected.', 'correct error message');
         })
         .success(function() {
             ok(true, 'success callback called');
@@ -90,7 +90,7 @@ test('success is called only once using Do#done & Do#success', function() {
     new Do(1)
         .error(function(err) {
             ok(err instanceof Error, 'error triggered');
-            equal(err.message, 'Do#done called more times than defined.', 'correct error message');
+            equal(err.message, 'Success can be called only once.', 'correct error message');
             start();
         })
         .success(function() {
@@ -105,7 +105,7 @@ test('success is called only once using Do#success', function() {
     new Do(1)
         .error(function(err) {
             ok(err instanceof Error, 'error triggered');
-            equal(err.message, 'Do#success called more than once.', 'correct error message');
+            equal(err.message, 'Success can be called only once.', 'correct error message');
             start();
         })
         .success(function() {
