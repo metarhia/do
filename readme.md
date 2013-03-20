@@ -2,6 +2,8 @@
 
 If you don't want to use all the async/chain libraries but just want a reliable way to know when the function is done - this is for you.
 
+The most important about "do" is its flexibility. It doesn't force you to structure your code at any specific way.
+
 ## Installation
     npm i do
 
