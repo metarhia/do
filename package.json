@@ -5,7 +5,7 @@
     "author": "Oleg Slobodskoi <oleg008@gmail.com>",
     "repository": {
         "type": "git",
-        "url": "http://github.com/kof/do.git"
+        "url": "git@github.com:kof/do.git"
     },
     "keywords": ["async", "sync", "chain", "callbacks", "step", "control", "flow"],
     "engines": {"node": "*"},
