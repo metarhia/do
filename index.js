@@ -10,7 +10,7 @@
  *   // Without a "new" statement.
  *   var todo = Do();
  *
- * @param {Number?} amount of todos
+ * @param {Number} [amount] amount of todos
  * @api public
  */
 function Do(amount) {
@@ -42,8 +42,8 @@ Do.prototype.errors;
  *   // Set a new amount.
  *   todo.amount(3);
  *
- * @param {Number?} value - if passed works as a setter, otherwise as a getter.
- * @return {Number|Do} amount or instance
+ * @param {Number} [value] if passed works as a setter, otherwise as a getter.
+ * @return {Number|Do} amount or this
  * @api public
  */
 Do.prototype.amount = function(value) {
@@ -65,8 +65,8 @@ Do.prototype.amount = function(value) {
  *   // Add 3 todos.
  *   todo.inc(3)
  *
- * @param {Number?} value - add the value to the current amount or just 1.
- * @return {Number} amount
+ * @param {Number} [value] add the value to the current amount or just 1.
+ * @return {Do} this
  * @api public
  */
 Do.prototype.inc = function(value) {
@@ -84,8 +84,8 @@ Do.prototype.inc = function(value) {
  *   // Reduce at 3 todos.
  *   todo.dec(3)
  *
- * @param {Number?} value - substitute the value from the current amount or just 1.
- * @return {Number} amount
+ * @param {Number} [value] substitute the value from the current amount or just 1.
+ * @return {Do} this
  * @api public
  */
 Do.prototype.dec = function(value) {
@@ -113,9 +113,9 @@ Do.prototype.dec = function(value) {
  *   // Trigger an error manually.
  *   todo.error(new Error());
  *
- * @param {Function|Error?} err - if function passed, it is used as an error callback,
+ * @param {Function|Error} [err] if function passed, it is used as an error callback,
  *     otherwise it can be an error which is passed to the error callback defined before.
- * @return {Do} instance
+ * @return {Do} this
  * @api public
  */
 Do.prototype.error = function(err) {
@@ -143,9 +143,9 @@ Do.prototype.error = function(err) {
  *   // Trigger success manually.
  *   todo.success();
  *
- * @param {Function?} fn - if function passed, it is used as success callback,
+ * @param {Function} [fn] if function passed, it is used as success callback,
  *     otherwise, success callback defined before, will be invoked.
- * @return {Do} instance
+ * @return {Do} this
  * @api public
  */
 Do.prototype.success = function(fn) {
@@ -176,9 +176,9 @@ Do.prototype.success = function(fn) {
  *   // Trigger complete manually.
  *   todo.complete();
  *
- * @param {Function?} fn - if function passed, it is used as complete callback,
+ * @param {Function} [fn] - if function passed, it is used as complete callback,
  *     otherwise, complete callback defined before, will be invoked.
- * @return {Do} instance
+ * @return {Do} this
  * @api public
  */
 Do.prototype.complete = function(fn) {
@@ -205,9 +205,9 @@ Do.prototype.complete = function(fn) {
  *   // context of `todo.done` is ensured.
  *   someTask(todo.done);
  *
- * @param {Error?} err - if error passed, error callback will be called,
+ * @param {Error} [err] - if error passed, error callback will be called,
  *     otherwise if all todos without errors are done, success callback will be called.
- * @return {Do} instance
+ * @return {Do} this
  * @api public
  */
 Do.prototype.done = function(err) {
@@ -263,7 +263,7 @@ Do.prototype._complete = function() {
 /**
  * Execute error callback, accumulate errors.
  *
- * @param {Error?} err
+ * @param {Error} [err]
  * @api private
  */
 Do.prototype._error = function(err) {

@@ -93,7 +93,7 @@ var todo = new Do(3);
 var todo = Do();
 ```
 
-## Do#amount(value:Number?)
+## Do#amount([value]:Number)
 
   Setter/getter for amount of todos.
   
@@ -106,7 +106,7 @@ todo.amount();
 todo.amount(3);
 ```
 
-## Do#inc(value:Number?)
+## Do#inc([value]:Number)
 
   Increment amount of todos.
   
@@ -119,7 +119,7 @@ todo.inc();
 todo.inc(3)
 ```
 
-## Do#dec(value:Number?)
+## Do#dec([value]:Number)
 
   Decrement amount of todos.
   
@@ -132,7 +132,7 @@ todo.dec();
 todo.dec(3)
 ```
 
-## Do#error(err:Function|Error?)
+## Do#error([err]:Function|Error)
 
   Set an error callback or trigger an error.
   
@@ -155,7 +155,7 @@ todo.error(function(err) {
 todo.error(new Error());
 ```
 
-## Do#success(fn:Function?)
+## Do#success([fn]:Function)
 
   Set a success callback or trigger success.
   
@@ -173,7 +173,7 @@ todo.success(function() {
 todo.success();
 ```
 
-## Do#complete(fn:Function?)
+## Do#complete([fn]:Function)
 
   Set a complete callback or trigger complete.
   
@@ -191,7 +191,7 @@ todo.complete(function() {
 todo.complete();
 ```
 
-## Do#done(err:Error?)
+## Do#done([err]:Error)
 
   Indicate a done task. If an error is passed as first parameter - error will
   be triggered.
