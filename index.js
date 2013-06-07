@@ -1,3 +1,8 @@
+// bind for IE<9
+function bind(func, context) {
+  return function() { return func.apply(context, arguments); };
+}
+
 /**
  * Do constructor.
  *
@@ -19,9 +24,10 @@ function Do(amount) {
     }
     this._amount = amount || 0;
     this.errors = [];
-    this.done = this.done.bind(this);
+    this.done = bind(this.done, this);
 }
 
+if( "undefined" !== typeof( module ) )
 module.exports = Do;
 
 /**
