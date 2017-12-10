@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Do constructor.
  *
@@ -14,12 +16,12 @@
  * @api public
  */
 function Do(amount) {
-    if (!(this instanceof Do)) {
-        return new Do(amount);
-    }
-    this._amount = amount || 0;
-    this.errors = [];
-    this.done = this.done.bind(this);
+  if (!(this instanceof Do)) {
+    return new Do(amount);
+  }
+  this._amount = amount || 0;
+  this.errors = [];
+  this.done = this.done.bind(this);
 }
 
 module.exports = Do;
@@ -47,12 +49,11 @@ Do.prototype.errors;
  * @api public
  */
 Do.prototype.amount = function(value) {
-    if (value != null) {
-        this._amount = value;
-        return this;
-    }
-
-    return this._amount;
+  if (value !== null) {
+    this._amount = value;
+    return this;
+  }
+  return this._amount;
 };
 
 /**
@@ -70,8 +71,8 @@ Do.prototype.amount = function(value) {
  * @api public
  */
 Do.prototype.inc = function(value) {
-    this._amount += value || 1;
-    return this;
+  this._amount += value || 1;
+  return this;
 };
 
 /**
@@ -84,19 +85,20 @@ Do.prototype.inc = function(value) {
  *   // Reduce at 3 todos.
  *   todo.dec(3)
  *
- * @param {Number} [value] substitute the value from the current amount or just 1.
+ * @param {Number} [value] substitute the value from the current amount or 1
  * @return {Do} this
  * @api public
  */
 Do.prototype.dec = function(value) {
-    this._amount -= value || 1;
-    return this;
+  this._amount -= value || 1;
+  return this;
 };
 
 /**
  * Set an error callback or trigger an error.
  *
- * Error callback is called EVERY time an error is passed to `Do#done` or `Do#error`.
+ * Error callback is called EVERY time an error is passed
+ * to `Do#done` or `Do#error`.
  *
  * Examples:
  *
@@ -113,25 +115,26 @@ Do.prototype.dec = function(value) {
  *   // Trigger an error manually.
  *   todo.error(new Error());
  *
- * @param {Function|Error} [err] if function passed, it is used as an error callback,
- *     otherwise it can be an error which is passed to the error callback defined before.
+ * @param {Function|Error} [err] if function passed, it is used as an
+ *     error callback, otherwise it can be an error which is passed
+ *     to the error callback defined before.
  * @return {Do} this
  * @api public
  */
 Do.prototype.error = function(err) {
-    if (typeof err == 'function') {
-        this._errorCallback = err;
-    } else {
-        this.done(err);
-    }
-
-    return this;
+  if (typeof(err) === 'function') {
+    this._errorCallback = err;
+  } else {
+    this.done(err);
+  }
+  return this;
 };
 
 /**
  * Set a success callback or trigger success.
  *
- * If all todos are done without errors - success callback will be called by Do#done.
+ * If all todos are done without errors - success callback will be
+ *       called by Do#done.
  * Success callback is called ONLY ONCE.
  *
  * Examples:
@@ -149,22 +152,20 @@ Do.prototype.error = function(err) {
  * @api public
  */
 Do.prototype.success = function(fn) {
-    var err;
-
-    if (typeof fn == 'function') {
-        this._successCallback = fn;
-    } else {
-        this._validateCallbacks();
-        this._complete();
-    }
-
-    return this;
+  if (typeof(fn) === 'function') {
+    this._successCallback = fn;
+  } else {
+    this._validateCallbacks();
+    this._complete();
+  }
+  return this;
 };
 
 /**
  * Set a complete callback or trigger complete.
  *
- * Complete callback is always called ONCE if it is defined independent of errors.
+ * Complete callback is always called ONCE if it is defined
+ *       independent of errors.
  *
  * Examples:
  *
@@ -182,14 +183,13 @@ Do.prototype.success = function(fn) {
  * @api public
  */
 Do.prototype.complete = function(fn) {
-    if (typeof fn == 'function') {
-        this._completeCallback = fn;
-    } else {
-        this._validateCallbacks();
-        this._complete();
-    }
-
-    return this;
+  if (typeof(fn) === 'function') {
+    this._completeCallback = fn;
+  } else {
+    this._validateCallbacks();
+    this._complete();
+  }
+  return this;
 };
 
 /**
@@ -206,22 +206,23 @@ Do.prototype.complete = function(fn) {
  *   someTask(todo.done);
  *
  * @param {Error} [err] - if error passed, error callback will be called,
- *     otherwise if all todos without errors are done, success callback will be called.
+ *     otherwise if all todos without errors are done, success callback
+ *     will be called.
  * @return {Do} this
  * @api public
  */
 Do.prototype.done = function(err) {
-    this._validateCallbacks();
-    this._amount--;
-    this._error(err);
+  this._validateCallbacks();
+  this._amount--;
+  this._error(err);
 
-    if (this._amount === 0) {
-        this._complete();
-    } else if (this._amount < 0) {
-        this._error(new Error('Do#done called more times than expected.'));
-    }
+  if (this._amount === 0) {
+    this._complete();
+  } else if (this._amount < 0) {
+    this._error(new Error('Do#done called more times than expected.'));
+  }
 
-    return this;
+  return this;
 };
 
 /**
@@ -230,9 +231,14 @@ Do.prototype.done = function(err) {
  * @api private
  */
 Do.prototype._validateCallbacks = function() {
-    if (!this._completeCallback && !(this._errorCallback && this._successCallback)) {
-        throw new Error('Either "error" and "success" or "complete" callback should be defined.');
-    }
+  if (
+    !this._completeCallback &&
+    !(this._errorCallback && this._successCallback)
+  ) {
+    throw new Error(
+      'Either "error" and "success" or "complete" callback should be defined.'
+    );
+  }
 };
 
 /**
@@ -241,23 +247,23 @@ Do.prototype._validateCallbacks = function() {
  * @api private
  */
 Do.prototype._complete = function() {
-    if (this._successCallback && !this.errors.length) {
-        if (this._successCalled) {
-            this._error(new Error('Success can be called only once.'));
-        } else {
-            this._successCalled = true;
-            this._successCallback();
-        }
+  if (this._successCallback && !this.errors.length) {
+    if (this._successCalled) {
+      this._error(new Error('Success can be called only once.'));
+    } else {
+      this._successCalled = true;
+      this._successCallback();
     }
+  }
 
-    if (this._completeCallback) {
-        if (this._completeCalled) {
-            this._error(new Error('Complete can be called only once.'));
-        } else {
-            this._completeCalled = true;
-            this._completeCallback();
-        }
+  if (this._completeCallback) {
+    if (this._completeCalled) {
+      this._error(new Error('Complete can be called only once.'));
+    } else {
+      this._completeCalled = true;
+      this._completeCallback();
     }
+  }
 };
 
 /**
@@ -267,10 +273,10 @@ Do.prototype._complete = function() {
  * @api private
  */
 Do.prototype._error = function(err) {
-    if (err) {
-        this.errors.push(err);
-        if (this._errorCallback) {
-            this._errorCallback(err);
-        }
+  if (err) {
+    this.errors.push(err);
+    if (this._errorCallback) {
+      this._errorCallback(err);
     }
+  }
 };
