@@ -1,25 +1,50 @@
 {
-    "name": "do",
-    "description": "The simplest way to manage callbacks.",
-    "version": "0.4.0",
-    "author": "Oleg Slobodskoi <oleg008@gmail.com>",
-    "repository": {
-        "type": "git",
-        "url": "git@github.com:kof/connect-debounce.git"
-    },
-    "keywords": ["async", "sync", "chain", "callbacks", "step", "control", "flow"],
-    "engines": {"node": "*"},
-    "devDependencies": {
-        "dox": "0.4.2",
-        "qunit": "0.5.15"
-    },
-    "scripts": {
-        "test": "node_modules/qunit/bin/cli.js -c Do:./index.js -t ./test.js"
-    },
-    "licenses": [
-        {
-           "type": "MIT",
-           "url": "http://www.opensource.org/licenses/mit-license.php"
-        }
-    ]
+  "name": "do",
+  "version": "0.4.0",
+  "description": "The simplest way to manage asynchronicity",
+  "license": "MIT",
+  "author": "Oleg Slobodskoi <oleg008@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/metarhia/do"
+  },
+  "keywords": [
+    "metasync",
+    "callback",
+    "callbacks",
+    "promise",
+    "sync",
+    "async",
+    "chain",
+    "asyncronous",
+    "parallel",
+    "sequential",
+    "metarhia",
+    "step",
+    "control",
+    "flow",
+    "collector",
+    "errback",
+    "err-first",
+    "error-first",
+    "callback-last",
+    "datacollector",
+    "keycollector",
+    "composition"
+  ],
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "main": "./do.js",
+  "readmeFilename": "README.md",
+  "scripts": {
+    "test": "node_modules/qunit/bin/cli.js -c Do:./do.js -t ./test.js",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "dox": "0.4.2",
+    "qunit": "0.5.15",
+    "eslint": "^4.11.0",
+    "tap": "^10.7.3"
+  }
 }
