@@ -1,6 +1,6 @@
 {
   "name": "do",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "The simplest way to manage asynchronicity",
   "license": "MIT",
   "author": "Oleg Slobodskoi <oleg008@gmail.com>",
@@ -38,13 +38,13 @@
   "main": "./do.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "node_modules/qunit/bin/cli.js -c Do:./do.js -t ./test.js",
-    "lint": "eslint ."
+    "test": "npm run lint && node_modules/qunit/bin/cli.js -c Do:./do.js -t ./test.js",
+    "lint": "eslint do.js"
   },
   "devDependencies": {
-    "dox": "0.4.2",
-    "qunit": "0.5.15",
-    "eslint": "^4.11.0",
-    "tap": "^10.7.3"
+    "dox": "^0.9.0",
+    "qunit": "^2.4.1",
+    "eslint": "^4.12.0",
+    "tap": "^11.0.0"
   }
 }
