@@ -49,7 +49,7 @@ Do.prototype.errors;
  * @api public
  */
 Do.prototype.amount = function(value) {
-  if (value !== null) {
+  if (typeof(value) === 'number') {
     this._amount = value;
     return this;
   }
