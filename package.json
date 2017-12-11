@@ -38,7 +38,7 @@
   "main": "./do.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "npm run lint && node_modules/qunit/bin/cli.js -c Do:./do.js -t ./test.js",
+    "test": "npm run lint && qunit",
     "lint": "eslint do.js"
   },
   "devDependencies": {
