@@ -14,18 +14,17 @@ tap.test('get/set/inc/dec amount', (test) => {
 });
 
 tap.test('throw if callbacks are not defined', (test) => {
-  
   test.throws(() => new Do(1).done(new Error()), Error,
     'throw if error is passed and error callback not defined.');
 
   test.throws(() => new Do(1).done(), Error,
-    'throw if no error is passed, tasks are done, but no success callback defined');
+    'throw if no error is passed, but no success callback defined');
 
   const todo = new Do(1).complete(() => {}).done();
 
   test.equal(todo.errors.length, 0,
     'do not throws if complete callback is defined');
-  
+
   test.end();
 });
 
@@ -101,11 +100,12 @@ tap.test('success is called only once using Do#success', (test) => {
   test.end();
 });
 
-tap.test('complete called without errors and without success/error callbacks', (test) => {
-  const todo = new Do(1).complete(() => {}).done();
-  test.equal(todo.errors.length, 0, 'complete called without errors');
-  test.end();
-});
+tap.test('complete called without errors and success/error callbacks',
+  (test) => {
+    const todo = new Do(1).complete(() => {}).done();
+    test.equal(todo.errors.length, 0, 'complete called without errors');
+    test.end();
+  });
 
 tap.test('complete called without errors with success callbacks', (test) => {
   const todo = new Do(1)
@@ -154,9 +154,9 @@ tap.test('no todos and .success call', (test) => {
     })
     .success(() => {
       test.ok(true, 'success called');
+      test.end();
     })
     .success();
-  test.end();
 });
 
 tap.test('no todos and .complete call', (test) => {
@@ -166,8 +166,8 @@ tap.test('no todos and .complete call', (test) => {
     })
     .complete(() => {
       test.ok(true, 'complete called');
+      test.end();
     })
     .complete();
-  test.end();
 });
 

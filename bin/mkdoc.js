@@ -10,9 +10,9 @@ let apiDoc = dox.api(ast);
 
 // Don't like the new format Do.method
 apiDoc = apiDoc
-    .replace(/Do\./g, 'Do#')
-    .replace('##', '###')
-    .trim();
+  .replace(/Do\./g, 'Do#')
+  .replace('##', '###')
+  .trim();
 
 const tpl = fs.readFileSync(__dirname + '/readme.tpl', 'utf8');
 const readme = tpl.replace('{api}', apiDoc);
