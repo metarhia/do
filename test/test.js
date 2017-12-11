@@ -1,19 +1,20 @@
 'use strict';
 
+const tap = require('tap');
 const Do = require('..');
 
-QUnit.test('get/set/inc/dec amount', (test) => {
+tap.test('get/set/inc/dec amount', (test) => {
   test.equal(new Do().amount(5).amount(), 5, 'set amount');
   test.equal(new Do(5).amount(), 5, 'get amount');
   test.equal(new Do(5).inc().amount(), 6, 'inc +1');
   test.equal(new Do(5).inc(3).amount(), 8, 'inc +3');
   test.equal(new Do(5).dec().amount(), 4, 'dec -1');
   test.equal(new Do(5).dec(3).amount(), 2, 'inc -3');
+  test.end();
 });
 
-QUnit.test('throw if callbacks are not defined', (test) => {
-  test.expect(3);
-
+tap.test('throw if callbacks are not defined', (test) => {
+  
   test.throws(() => new Do(1).done(new Error()), Error,
     'throw if error is passed and error callback not defined.');
 
@@ -24,37 +25,36 @@ QUnit.test('throw if callbacks are not defined', (test) => {
 
   test.equal(todo.errors.length, 0,
     'do not throws if complete callback is defined');
+  
+  test.end();
 });
 
-QUnit.test('done called more times than defined', (test) => {
-  test.expect(3);
-
+tap.test('done called more times than defined', (test) => {
   new Do(1)
     .error((err) => {
       test.ok(err instanceof Error, 'error callback called');
       test.equal(err.message,
         'Do#done called more times than expected.', 'correct error message');
+      test.end();
     })
     .success(() => {
       test.ok(true, 'success callback called');
     }).done().done();
 });
 
-QUnit.test('#1 no success called if error is happened', (test) => {
-  test.expect(1);
-
+tap.test('#1 no success called if error is happened', (test) => {
   new Do(1)
     .error((err) => {
       test.ok(err instanceof Error, 'error callback called');
+      test.end();
     })
     .success(() => {
       test.ok(true, 'success callback should not be called if error happened');
+      test.end();
     }).done(new Error());
 });
 
-QUnit.test('#2 no success called if error is happened', (test) => {
-  test.expect(2);
-
+tap.test('#2 no success called if error is happened', (test) => {
   new Do(1)
     .error((err) => {
       test.ok(err instanceof Error, 'error callback called');
@@ -62,22 +62,20 @@ QUnit.test('#2 no success called if error is happened', (test) => {
     .success(() => {
       test.ok(false, 'success callback should not be called if error happened');
     }).done(new Error()).done();
+  test.end();
 });
 
-QUnit.test('success is called only once using Do#done', (test) => {
-  test.expect(1);
-
+tap.test('success is called only once using Do#done', (test) => {
   new Do(3)
     .error(() => {})
     .success(() => {
       test.ok(true, 'success callback called once');
     }).done().done().done();
+  test.end();
 });
 
 
-QUnit.test('success is called only once using Do#done & Do#success', (test) => {
-  test.expect(3);
-
+tap.test('success is called only once using Do#done & Do#success', (test) => {
   new Do(1)
     .error((err) => {
       test.ok(err instanceof Error, 'error triggered');
@@ -87,11 +85,10 @@ QUnit.test('success is called only once using Do#done & Do#success', (test) => {
     .success(() => {
       test.ok(true, 'success callback called once');
     }).success().done();
+  test.end();
 });
 
-QUnit.test('success is called only once using Do#success', (test) => {
-  test.expect(3);
-
+tap.test('success is called only once using Do#success', (test) => {
   new Do(1)
     .error((err) => {
       test.ok(err instanceof Error, 'error triggered');
@@ -101,67 +98,56 @@ QUnit.test('success is called only once using Do#success', (test) => {
     .success(() => {
       test.ok(true, 'success callback called once');
     }).success().success();
+  test.end();
 });
 
-QUnit.test('complete called without errors and without success/error callbacks', (test) => {
-  test.expect(1);
-
-  new Do(1).complete(function() {
-    test.equal(this.errors.length, 0, 'complete called without errors');
-  }).done();
+tap.test('complete called without errors and without success/error callbacks', (test) => {
+  const todo = new Do(1).complete(() => {}).done();
+  test.equal(todo.errors.length, 0, 'complete called without errors');
+  test.end();
 });
 
-QUnit.test('complete called without errors with success callbacks', (test) => {
-  test.expect(2);
-
-  new Do(1)
+tap.test('complete called without errors with success callbacks', (test) => {
+  const todo = new Do(1)
     .success(() => {
       test.ok(true, 'success called');
     })
-    .complete(function() {
-      test.equal(this.errors.length, 0, 'complete called without errors');
-    }).done();
+    .complete(() => {}).done();
+  test.equal(todo.errors.length, 0, 'complete called without errors');
+  test.end();
 });
 
-QUnit.test('complete called with error', (test) => {
-  test.expect(2);
-
-  new Do(1)
+tap.test('complete called with error', (test) => {
+  const todo = new Do(1)
     .error((err) => {
       test.ok(err instanceof Error, 'error callback got an error');
     })
-    .complete(function() {
-      test.equal(this.errors.length, 1, 'complete called with error');
-    }).done(new Error());
+    .complete(() => {}).done(new Error());
+  test.equal(todo.errors.length, 1, 'complete called with error');
+  test.end();
 });
 
-QUnit.test('invoke complete directly', (test) => {
-  test.expect(2);
-
-  new Do(1)
+tap.test('invoke complete directly', (test) => {
+  const todo = new Do(1)
     .success(() => {
       test.ok(true, 'success called on complete');
     })
-    .complete(function() {
-      test.equal(this.errors.length, 0, 'complete called without errors');
-    }).complete();
+    .complete(() => {}).complete();
+  test.equal(todo.errors.length, 0, 'complete called without errors');
+  test.end();
 });
 
-QUnit.test('invoking success triggers complete', (test) => {
-  test.expect(2);
-
-  new Do(1)
+tap.test('invoking success triggers complete', (test) => {
+  const todo = new Do(1)
     .success(() => {
       test.ok(true, 'success called on complete');
     })
-    .complete(function() {
-      test.equal(this.errors.length, 0, 'complete called without errors');
-    }).success();
+    .complete(() => {}).success();
+  test.equal(todo.errors.length, 0, 'complete called without errors');
+  test.end();
 });
 
-QUnit.test('no todos and .success call', (test) => {
-  test.expect(1);
-
+tap.test('no todos and .success call', (test) => {
   new Do()
     .error(() => {
       test.ok(false, 'no error should happen');
@@ -170,11 +156,10 @@ QUnit.test('no todos and .success call', (test) => {
       test.ok(true, 'success called');
     })
     .success();
+  test.end();
 });
 
-QUnit.test('no todos and .complete call', (test) => {
-  test.expect(1);
-
+tap.test('no todos and .complete call', (test) => {
   new Do()
     .error(() => {
       test.ok(false, 'no error should happen');
@@ -183,4 +168,6 @@ QUnit.test('no todos and .complete call', (test) => {
       test.ok(true, 'complete called');
     })
     .complete();
+  test.end();
 });
+
