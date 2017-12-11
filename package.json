@@ -38,7 +38,7 @@
   "main": "./do.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "npm run lint && node test/test.js",
+    "test": "npm run lint && tap test/test.js",
     "lint": "eslint do.js"
   },
   "devDependencies": {
