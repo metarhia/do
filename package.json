@@ -42,8 +42,8 @@
     "lint": "eslint do.js"
   },
   "devDependencies": {
-    "dox": "^0.9.0",
     "eslint": "^4.12.0",
     "tap": "^11.0.0"
-  }
+  },
+  "dependencies": {}
 }
