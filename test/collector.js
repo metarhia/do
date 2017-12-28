@@ -3,7 +3,27 @@
 const tap = require('tap');
 const collect = require('..').do;
 
-tap.test('data collector', (test) => {
+tap.test('data collector functor', (test) => {
+  const expectedResult = {
+    key1: 1,
+    key2: 2,
+    key3: 3
+  };
+
+  const dc = collect(3)
+    .done((err, result) => {
+      test.error(err);
+      test.strictSame(result, expectedResult);
+      test.end();
+    })
+    .timeout(1000);
+
+  dc('key1', null, 1);
+  dc('key2', null, 2);
+  dc('key3', null, 3);
+});
+
+tap.test('data collector method', (test) => {
   const expectedResult = {
     key1: 1,
     key2: 2,

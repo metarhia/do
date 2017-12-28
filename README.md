@@ -13,6 +13,7 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
 ## Usage
 
+Series async execution
 ```js
 const chain = require('do');
 
@@ -27,7 +28,24 @@ c1((err, result) => {
   if (err) console.log(err);
   else console.dir({ result });
 });
+```
 
+Data collector
+```js
+const chain = require('do');
+const fs = require('fs');
+
+const dc = chain.do(4);
+
+dc('user', null, { name: 'Marcus Aurelius' });
+
+fs.readFile('HISTORY.md',
+  (err, data) => dc.collect('history', err, data)
+);
+
+dc.take('readme', fs.readFile, 'README.md');
+
+setTimeout(() => dc.pick('timer', { date: new Date() }), 1000);
 ```
 
 ## Run tests
