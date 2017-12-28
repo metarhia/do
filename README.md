@@ -13,7 +13,22 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 
 ## Usage
 
-## Caveats
+```js
+const chain = require('do');
+
+const c1 = chain
+  .do(readConfig, 'myConfig')
+  .do(selectFromDb, 'select * from cities')
+  .do(getHttpPage, 'http://kpi.ua')
+  .do(readFile, 'README.md');
+
+c1((err, result) => {
+  console.log('done');
+  if (err) console.log(err);
+  else console.dir({ result });
+});
+
+```
 
 ## Run tests
 
