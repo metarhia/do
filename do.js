@@ -53,19 +53,7 @@ Do.prototype.forward = function() {
   });
 };
 
-function Collector(
-  expected // number or array of string, count or keys
-) {
-  this.expectKeys = Array.isArray(expected) ? new Set(expected) : null;
-  this.expected = this.expectKeys ? expected.length : expected;
-  this.keys = new Set();
-  this.count = 0;
-  this.timer = null;
-  this.onDone = emptiness;
-  this.isDistinct = false;
-  this.isDone = false;
-  this.data = {};
-}
+function Collector() {}
 
 Collector.prototype.collect = function(key, err, value) {
   if (this.isDone) return this;
@@ -164,10 +152,24 @@ const collect = (
   // Collector instance constructor
   expected // number or array of string,
   // Returns: Collector, instance
-) => (
-  new Collector(expected)
-);
+) => {
+  const expectKeys = Array.isArray(expected) ? new Set(expected) : null;
+  const fields = {
+    expectKeys,
+    expected: expectKeys ? expected.length : expected,
+    keys: new Set(),
+    count: 0,
+    timer: null,
+    onDone: emptiness,
+    isDistinct: false,
+    isDone: false,
+    data: {}
+  };
+  const collector = (...args) => collector.collect(...args);
+  Object.setPrototypeOf(collector, Collector.prototype);
+  return Object.assign(collector, fields);
+};
 
 module.exports = {
-  do: (...args) => ((typeof(args[0]) === 'number') ? collect : chain)(...args)
+  do: (...args) => ((typeof(args[0]) === 'function') ? chain : collect)(...args)
 };
