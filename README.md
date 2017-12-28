@@ -14,7 +14,9 @@ If you don't want to use all the async/chain libraries but just want a reliable 
 ## Usage
 
 ```js
-const c1 = metasync
+const chain = require('do');
+
+const c1 = chain
   .do(readConfig, 'myConfig')
   .do(selectFromDb, 'select * from cities')
   .do(getHttpPage, 'http://kpi.ua')
