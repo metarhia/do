@@ -3,7 +3,11 @@
   "version": "0.5.0",
   "description": "The simplest way to manage asynchronicity",
   "license": "MIT",
-  "author": "Oleg Slobodskoi <oleg008@gmail.com>",
+  "contributors": [
+    "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
+    "Oleg Slobodskoi <oleg008@gmail.com>",
+    "Timoshenko Ivan <kerckh@gmail.com>"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/metarhia/do"
