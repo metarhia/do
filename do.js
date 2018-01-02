@@ -169,7 +169,10 @@ const collect = (
     isDone: false,
     data: {}
   };
-  const collector = (...args) => collector.collect(...args);
+  const collector = (...args) => {
+    if (args.length === 1) return collector.callback(args[0]);
+    return collector.collect(...args);
+  };
   Object.setPrototypeOf(collector, Collector.prototype);
   return Object.assign(collector, fields);
 };
