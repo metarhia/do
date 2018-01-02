@@ -35,16 +35,12 @@ Data collector
 const chain = require('do');
 const fs = require('fs');
 
-const dc = chain.do(4);
+const dc = chain.do(5);
 
 dc('user', null, { name: 'Marcus Aurelius' });
-
-fs.readFile('HISTORY.md',
-  (err, data) => dc.collect('history', err, data)
-);
-
+fs.readFile('HISTORY.md',(err, data) => dc.collect('history', err, data));
+fs.readFile('README.md', dc.callback('readme'));
 dc.take('readme', fs.readFile, 'README.md');
-
 setTimeout(() => dc.pick('timer', { date: new Date() }), 1000);
 ```
 
