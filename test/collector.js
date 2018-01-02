@@ -185,6 +185,17 @@ tap.test('collect with take', (test) => {
   col.take('someKey', af, 'someVal');
 });
 
+tap.test('collect generate callback', (test) => {
+  const col = collect(1);
+  col.done((err, res) => {
+    test.error(err);
+    test.strictSame(res, { someKey: 'someVal' });
+    test.end();
+  });
+  const af = (x, callback) => callback(null, x);
+  af('someVal', col.callback('someKey'));
+});
+
 tap.test('collect with timeout error', (test) => {
   const timeoutErr = new Error('Collector timeout');
   const col = collect(1)

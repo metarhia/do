@@ -95,6 +95,10 @@ Collector.prototype.take = function(key, fn, ...args) {
   return this;
 };
 
+Collector.prototype.callback = function(key) {
+  return (...args) => this(key, ...args);
+};
+
 Collector.prototype.timeout = function(msec) {
   if (this.timer) {
     clearTimeout(this.timer);
