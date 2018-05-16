@@ -1,6 +1,6 @@
 'use strict';
 
-const collect = api.do.do;
+const collect = api.do;
 
 api.metatests.test('data collector functor', (test) => {
   const expectedResult = {

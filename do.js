@@ -177,6 +177,9 @@ const collect = (
   return Object.assign(collector, fields);
 };
 
-module.exports = {
-  do: (...args) => ((typeof(args[0]) === 'function') ? chain : collect)(...args)
-};
+const ex = (...args) => (
+  (typeof(args[0]) === 'function') ? chain : collect
+)(...args);
+
+ex.do = ex;
+module.exports = ex;
