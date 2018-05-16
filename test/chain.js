@@ -1,7 +1,6 @@
 'use strict';
 
-const tap = require('tap');
-const chain = require('..');
+const chain = api.do;
 
 const wrapAsync = (
   // Emulate Asynchronous calls
@@ -10,7 +9,7 @@ const wrapAsync = (
   setTimeout(callback, Math.floor((Math.random() * 1000)));
 };
 
-tap.test('simple chain/do', (test) => {
+api.metatests.test('simple chain/do', (test) => {
   const readConfig = (name, callback) => {
     test.strictSame(name, 'myConfig');
     wrapAsync(() => {

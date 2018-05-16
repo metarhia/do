@@ -1,9 +1,8 @@
 'use strict';
 
-const tap = require('tap');
-const collect = require('..').do;
+const collect = api.do.do;
 
-tap.test('data collector functor', (test) => {
+api.metatests.test('data collector functor', (test) => {
   const expectedResult = {
     key1: 1,
     key2: 2,
@@ -23,7 +22,7 @@ tap.test('data collector functor', (test) => {
   dc('key3', null, 3);
 });
 
-tap.test('data collector method', (test) => {
+api.metatests.test('data collector method', (test) => {
   const expectedResult = {
     key1: 1,
     key2: 2,
@@ -43,7 +42,7 @@ tap.test('data collector method', (test) => {
   dc.collect('key3', null, 3);
 });
 
-tap.test('data collector', (test) => {
+api.metatests.test('data collector', (test) => {
   const expectedResult = {
     key1: 1,
     key2: 2,
@@ -63,7 +62,7 @@ tap.test('data collector', (test) => {
   kc.collect('key3', null, 3);
 });
 
-tap.test('distinct data collector', (test) => {
+api.metatests.test('distinct data collector', (test) => {
   const expectedResult = {
     key1: 2,
     key2: 2,
@@ -84,7 +83,7 @@ tap.test('distinct data collector', (test) => {
   dc.pick('key3', 3);
 });
 
-tap.test('distinct key collector', (test) => {
+api.metatests.test('distinct key collector', (test) => {
   const expectedResult = {
     key1: 2,
     key2: 2,
@@ -105,7 +104,7 @@ tap.test('distinct key collector', (test) => {
   kc.pick('key3', 3);
 });
 
-tap.test('data collector with repeated keys', (test) => {
+api.metatests.test('data collector with repeated keys', (test) => {
   const dc = collect(3)
     .timeout(100)
     .done((err) => {
@@ -118,7 +117,7 @@ tap.test('data collector with repeated keys', (test) => {
   dc.collect('key2', null, 2);
 });
 
-tap.test('key collector with repeated keys', (test) => {
+api.metatests.test('key collector with repeated keys', (test) => {
   const kc = collect(['key1', 'key2', 'key3'])
     .timeout(100)
     .done((err) => {
@@ -131,7 +130,7 @@ tap.test('key collector with repeated keys', (test) => {
   kc.collect('key2', null, 2);
 });
 
-tap.test('collect with error', (test) => {
+api.metatests.test('collect with error', (test) => {
   const testErr = new Error('Test error');
   const col = collect(1);
   col.done((err, res) => {
@@ -142,7 +141,7 @@ tap.test('collect with error', (test) => {
   col.fail('someKey', testErr);
 });
 
-tap.test('collect method calling after it\'s done', (test) => {
+api.metatests.test('collect method calling after it\'s done', (test) => {
   const col = collect(1);
   col.done((err, res) => {
     test.error(err);
@@ -153,7 +152,7 @@ tap.test('collect method calling after it\'s done', (test) => {
   col.pick('someKey2', 'someVal2');
 });
 
-tap.test('keys collector receives wrong key', (test) => {
+api.metatests.test('keys collector receives wrong key', (test) => {
   const col = collect(['rightKey']);
   col.done((err, res) => {
     test.error(err);
@@ -164,7 +163,7 @@ tap.test('keys collector receives wrong key', (test) => {
   col.pick('rightKey', 'someVal');
 });
 
-tap.test('distinct keys collector receives wrong key', (test) => {
+api.metatests.test('distinct keys collector receives wrong key', (test) => {
   const col = collect(['rightKey']).distinct();
   col.done((err) => {
     test.assert(err);
@@ -174,7 +173,7 @@ tap.test('distinct keys collector receives wrong key', (test) => {
   col.pick('rightKey', 'someVal');
 });
 
-tap.test('collect with take', (test) => {
+api.metatests.test('collect with take', (test) => {
   const col = collect(1);
   col.done((err, res) => {
     test.error(err);
@@ -185,7 +184,7 @@ tap.test('collect with take', (test) => {
   col.take('someKey', af, 'someVal');
 });
 
-tap.test('collect generate callback', (test) => {
+api.metatests.test('collect generate callback', (test) => {
   const col = collect(1);
   col.done((err, res) => {
     test.error(err);
@@ -196,7 +195,7 @@ tap.test('collect generate callback', (test) => {
   af('someVal', col.callback('someKey'));
 });
 
-tap.test('collect generate callback shorthand', (test) => {
+api.metatests.test('collect generate callback shorthand', (test) => {
   const col = collect(1);
   col.done((err, res) => {
     test.error(err);
@@ -207,7 +206,7 @@ tap.test('collect generate callback shorthand', (test) => {
   af('someVal', col('someKey'));
 });
 
-tap.test('collect with timeout error', (test) => {
+api.metatests.test('collect with timeout error', (test) => {
   const timeoutErr = new Error('Collector timeout');
   const col = collect(1)
     .done((err, res) => {
@@ -220,7 +219,7 @@ tap.test('collect with timeout error', (test) => {
   col.take('someKey', af, 'someVal');
 });
 
-tap.test('collect with take calls bigger than expected', (test) => {
+api.metatests.test('collect with take calls bigger than expected', (test) => {
   const col = collect(1)
     .done((err, res) => {
       test.error(err);
@@ -232,7 +231,7 @@ tap.test('collect with take calls bigger than expected', (test) => {
   col.take('someKey2', af, 'someVal2');
 });
 
-tap.test('cancel data collector', (test) => {
+api.metatests.test('cancel data collector', (test) => {
   const dc = collect(3)
     .done((err) => {
       test.assert(err);
@@ -243,7 +242,7 @@ tap.test('cancel data collector', (test) => {
   dc.cancel();
 });
 
-tap.test('cancel key collector', (test) => {
+api.metatests.test('cancel key collector', (test) => {
   const dc = collect(['uno', 'due'])
     .done((err) => {
       test.assert(err);
@@ -254,7 +253,7 @@ tap.test('cancel key collector', (test) => {
   dc.cancel();
 });
 
-tap.test('collect then success', (test) => {
+api.metatests.test('collect then success', (test) => {
   const col = collect(1).then(
     (result) => {
       test.assert(result);
@@ -268,7 +267,7 @@ tap.test('collect then success', (test) => {
   col.pick('Key', 'value');
 });
 
-tap.test('collect then fail', (test) => {
+api.metatests.test('collect then fail', (test) => {
   collect(5).timeout(10).then(
     (result) => {
       test.error(result);
