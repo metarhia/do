@@ -1,6 +1,6 @@
 {
   "name": "do",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "The simplest way to manage asynchronicity",
   "license": "MIT",
   "contributors": [
@@ -47,7 +47,6 @@
   },
   "devDependencies": {
     "eslint": "^4.19.1",
-    "metatests": "^0.1.8"
-  },
-  "dependencies": {}
+    "metatests": "^0.1.10"
+  }
 }
