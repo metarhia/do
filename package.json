@@ -42,11 +42,11 @@
   "main": "./do.js",
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "npm run lint && node test/all",
-    "lint": "eslint do.js"
+    "test": "npm run lint && metatests test",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "eslint": "^4.19.1",
-    "metatests": "^0.1.10"
+    "metatests": "^0.2.4"
   }
 }
