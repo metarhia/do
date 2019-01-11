@@ -1,21 +1,5 @@
 'use strict';
 
-const emptiness = () => {};
-
-// Wrap function: call once, not null
-//   fn <Function> (optional)
-// Returns: <Function> wrapped callback
-const once = fn => {
-  if (!fn) return emptiness;
-  let finished = false;
-  const wrap = (...args) => {
-    if (finished) return;
-    finished = true;
-    fn(...args);
-  };
-  return wrap;
-};
-
 function Do() {}
 
 const chain = function(fn, ...args) {
@@ -125,7 +109,7 @@ Collector.prototype.finalize = function(key, err, data) {
       this.timer = null;
     }
     this.isDone = true;
-    this.onDone(key, err, data);
+    if (this.onDone) this.onDone(key, err, data);
   }
   return this;
 };
@@ -141,9 +125,7 @@ Collector.prototype.cancel = function(err) {
   return this;
 };
 
-Collector.prototype.then = function(fulfilled, rejected) {
-  const fulfill = once(fulfilled);
-  const reject = once(rejected);
+Collector.prototype.then = function(fulfill, reject) {
   this.onDone = (err, result) => {
     if (err) reject(err);
     else fulfill(result);
@@ -162,7 +144,7 @@ const collect = expected => {
     keys: new Set(),
     count: 0,
     timer: null,
-    onDone: emptiness,
+    onDone: null,
     isDistinct: false,
     isDone: false,
     data: {}
