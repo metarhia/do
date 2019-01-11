@@ -2,11 +2,10 @@
 
 const emptiness = () => {};
 
-const once = (
-  // Wrap function: call once, not null
-  fn // function (optional)
-  // Returns: function, wrapped callback
-) => {
+// Wrap function: call once, not null
+//   fn <Function> (optional)
+// Returns: <Function> wrapped callback
+const once = fn => {
   if (!fn) return emptiness;
   let finished = false;
   const wrap = (...args) => {
@@ -20,7 +19,7 @@ const once = (
 function Do() {}
 
 const chain = function(fn, ...args) {
-  const current = (done) => {
+  const current = done => {
     if (done) current.done = done;
     if (current.prev) {
       current.prev.next = current;
@@ -152,11 +151,10 @@ Collector.prototype.then = function(fulfilled, rejected) {
   return this;
 };
 
-const collect = (
-  // Collector instance constructor
-  expected // number or array of string,
-  // Returns: Collector, instance
-) => {
+// Collector instance constructor
+//   expected <number> or array of string,
+// Returns: <Function> Collector
+const collect = expected => {
   const expectKeys = Array.isArray(expected) ? new Set(expected) : null;
   const fields = {
     expectKeys,
