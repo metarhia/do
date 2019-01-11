@@ -39,13 +39,13 @@ Do.prototype.forward = function() {
 function Collector() {}
 
 Collector.prototype.collect = function(key, err, value) {
-  if (this.isDone) return this;
+  if (this.finished) return this;
   if (err) {
     this.finalize(err, this.data);
     return this;
   }
   if (this.expectKeys && !this.expectKeys.has(key)) {
-    if (this.isDistinct) {
+    if (this.unique) {
       const err = new Error('Unexpected key: ' + key);
       this.finalize(err, this.data);
       return this;
@@ -97,25 +97,25 @@ Collector.prototype.timeout = function(msec) {
 };
 
 Collector.prototype.done = function(callback) {
-  this.onDone = callback;
+  this.finish = callback;
   return this;
 };
 
 Collector.prototype.finalize = function(key, err, data) {
-  if (this.isDone) return this;
-  if (this.onDone) {
+  if (this.finished) return this;
+  if (this.finish) {
     if (this.timer) {
       clearTimeout(this.timer);
       this.timer = null;
     }
-    this.isDone = true;
-    if (this.onDone) this.onDone(key, err, data);
+    this.finished = true;
+    if (this.finish) this.finish(key, err, data);
   }
   return this;
 };
 
 Collector.prototype.distinct = function(value = true) {
-  this.isDistinct = value;
+  this.unique = value;
   return this;
 };
 
@@ -126,7 +126,7 @@ Collector.prototype.cancel = function(err) {
 };
 
 Collector.prototype.then = function(fulfill, reject) {
-  this.onDone = (err, result) => {
+  this.finish = (err, result) => {
     if (err) reject(err);
     else fulfill(result);
   };
@@ -144,9 +144,9 @@ const collect = expected => {
     keys: new Set(),
     count: 0,
     timer: null,
-    onDone: null,
-    isDistinct: false,
-    isDone: false,
+    finish: null,
+    unique: false,
+    finished: false,
     data: {}
   };
   const collector = (...args) => {
