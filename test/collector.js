@@ -3,11 +3,11 @@
 const collect = require('..');
 const metatests = require('metatests');
 
-metatests.test('data collector functor', (test) => {
+metatests.test('data collector functor', test => {
   const expectedResult = {
     key1: 1,
     key2: 2,
-    key3: 3
+    key3: 3,
   };
 
   const dc = collect(3)
@@ -23,11 +23,11 @@ metatests.test('data collector functor', (test) => {
   dc('key3', null, 3);
 });
 
-metatests.test('data collector method', (test) => {
+metatests.test('data collector method', test => {
   const expectedResult = {
     key1: 1,
     key2: 2,
-    key3: 3
+    key3: 3,
   };
 
   const dc = collect(3)
@@ -43,11 +43,11 @@ metatests.test('data collector method', (test) => {
   dc.collect('key3', null, 3);
 });
 
-metatests.test('data collector', (test) => {
+metatests.test('data collector', test => {
   const expectedResult = {
     key1: 1,
     key2: 2,
-    key3: 3
+    key3: 3,
   };
 
   const kc = collect(['key1', 'key2', 'key3'])
@@ -63,11 +63,11 @@ metatests.test('data collector', (test) => {
   kc.collect('key3', null, 3);
 });
 
-metatests.test('distinct data collector', (test) => {
+metatests.test('distinct data collector', test => {
   const expectedResult = {
     key1: 2,
     key2: 2,
-    key3: 3
+    key3: 3,
   };
 
   const dc = collect(3)
@@ -84,11 +84,11 @@ metatests.test('distinct data collector', (test) => {
   dc.pick('key3', 3);
 });
 
-metatests.test('distinct key collector', (test) => {
+metatests.test('distinct key collector', test => {
   const expectedResult = {
     key1: 2,
     key2: 2,
-    key3: 3
+    key3: 3,
   };
 
   const kc = collect(['key1', 'key2', 'key3'])
@@ -105,10 +105,10 @@ metatests.test('distinct key collector', (test) => {
   kc.pick('key3', 3);
 });
 
-metatests.test('data collector with repeated keys', (test) => {
+metatests.test('data collector with repeated keys', test => {
   const dc = collect(3)
     .timeout(100)
-    .done((err) => {
+    .done(err => {
       test.assert(err);
       test.end();
     });
@@ -118,10 +118,10 @@ metatests.test('data collector with repeated keys', (test) => {
   dc.collect('key2', null, 2);
 });
 
-metatests.test('key collector with repeated keys', (test) => {
+metatests.test('key collector with repeated keys', test => {
   const kc = collect(['key1', 'key2', 'key3'])
     .timeout(100)
-    .done((err) => {
+    .done(err => {
       test.assert(err);
       test.end();
     });
@@ -131,7 +131,7 @@ metatests.test('key collector with repeated keys', (test) => {
   kc.collect('key2', null, 2);
 });
 
-metatests.test('collect with error', (test) => {
+metatests.test('collect with error', test => {
   const testErr = new Error('Test error');
   const col = collect(1);
   col.done((err, res) => {
@@ -142,7 +142,7 @@ metatests.test('collect with error', (test) => {
   col.fail('someKey', testErr);
 });
 
-metatests.test('collect method calling after it\'s done', (test) => {
+metatests.test('collect method calling after it is done', test => {
   const col = collect(1);
   col.done((err, res) => {
     test.error(err);
@@ -153,7 +153,7 @@ metatests.test('collect method calling after it\'s done', (test) => {
   col.pick('someKey2', 'someVal2');
 });
 
-metatests.test('keys collector receives wrong key', (test) => {
+metatests.test('keys collector receives wrong key', test => {
   const col = collect(['rightKey']);
   col.done((err, res) => {
     test.error(err);
@@ -164,9 +164,9 @@ metatests.test('keys collector receives wrong key', (test) => {
   col.pick('rightKey', 'someVal');
 });
 
-metatests.test('distinct keys collector receives wrong key', (test) => {
+metatests.test('distinct keys collector receives wrong key', test => {
   const col = collect(['rightKey']).distinct();
-  col.done((err) => {
+  col.done(err => {
     test.assert(err);
     test.end();
   });
@@ -174,7 +174,7 @@ metatests.test('distinct keys collector receives wrong key', (test) => {
   col.pick('rightKey', 'someVal');
 });
 
-metatests.test('collect with take', (test) => {
+metatests.test('collect with take', test => {
   const col = collect(1);
   col.done((err, res) => {
     test.error(err);
@@ -185,7 +185,7 @@ metatests.test('collect with take', (test) => {
   col.take('someKey', af, 'someVal');
 });
 
-metatests.test('collect generate callback', (test) => {
+metatests.test('collect generate callback', test => {
   const col = collect(1);
   col.done((err, res) => {
     test.error(err);
@@ -196,7 +196,7 @@ metatests.test('collect generate callback', (test) => {
   af('someVal', col.callback('someKey'));
 });
 
-metatests.test('collect generate callback shorthand', (test) => {
+metatests.test('collect generate callback shorthand', test => {
   const col = collect(1);
   col.done((err, res) => {
     test.error(err);
@@ -207,7 +207,7 @@ metatests.test('collect generate callback shorthand', (test) => {
   af('someVal', col('someKey'));
 });
 
-metatests.test('collect with timeout error', (test) => {
+metatests.test('collect with timeout error', test => {
   const timeoutErr = new Error('Collector timeout');
   const col = collect(1)
     .done((err, res) => {
@@ -220,47 +220,44 @@ metatests.test('collect with timeout error', (test) => {
   col.take('someKey', af, 'someVal');
 });
 
-metatests.test('collect with take calls bigger than expected', (test) => {
-  const col = collect(1)
-    .done((err, res) => {
-      test.error(err);
-      test.strictSame(Object.keys(res).length, 1);
-      test.end();
-    });
+metatests.test('collect with take calls bigger than expected', test => {
+  const col = collect(1).done((err, res) => {
+    test.error(err);
+    test.strictSame(Object.keys(res).length, 1);
+    test.end();
+  });
   const af = (x, callback) => setTimeout(() => callback(null, x), 1);
   col.take('someKey', af, 'someVal');
   col.take('someKey2', af, 'someVal2');
 });
 
-metatests.test('cancel data collector', (test) => {
-  const dc = collect(3)
-    .done((err) => {
-      test.assert(err);
-      test.end();
-    });
+metatests.test('cancel data collector', test => {
+  const dc = collect(3).done(err => {
+    test.assert(err);
+    test.end();
+  });
 
   dc.pick('key', 'value');
   dc.cancel();
 });
 
-metatests.test('cancel key collector', (test) => {
-  const dc = collect(['uno', 'due'])
-    .done((err) => {
-      test.assert(err);
-      test.end();
-    });
+metatests.test('cancel key collector', test => {
+  const dc = collect(['uno', 'due']).done(err => {
+    test.assert(err);
+    test.end();
+  });
 
   dc.pick('key', 'value');
   dc.cancel();
 });
 
-metatests.test('collect then success', (test) => {
+metatests.test('collect then success', test => {
   const col = collect(1).then(
-    (result) => {
+    result => {
       test.assert(result);
       test.end();
     },
-    (err) => {
+    err => {
       test.error(err);
       test.end();
     }
@@ -268,15 +265,17 @@ metatests.test('collect then success', (test) => {
   col.pick('Key', 'value');
 });
 
-metatests.test('collect then fail', (test) => {
-  collect(5).timeout(10).then(
-    (result) => {
-      test.error(result);
-      test.end();
-    },
-    (err) => {
-      test.assert(err);
-      test.end();
-    }
-  );
+metatests.test('collect then fail', test => {
+  collect(5)
+    .timeout(10)
+    .then(
+      result => {
+        test.error(result);
+        test.end();
+      },
+      err => {
+        test.assert(err);
+        test.end();
+      }
+    );
 });

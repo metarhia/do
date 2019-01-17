@@ -8,11 +8,13 @@
 If you don't want to use all the async/chain libraries but just want a reliable way to know when the function is done - this is for you.
 
 ## Installation
+
 `npm i do`
 
 ## Usage
 
 Series async execution
+
 ```js
 const chain = require('do');
 
@@ -30,6 +32,7 @@ c1((err, result) => {
 ```
 
 Data collector
+
 ```js
 const chain = require('do');
 const fs = require('fs');
@@ -37,7 +40,7 @@ const fs = require('fs');
 const dc = chain.do(6);
 
 dc('user', null, { name: 'Marcus Aurelius' });
-fs.readFile('HISTORY.md',(err, data) => dc.collect('history', err, data));
+fs.readFile('HISTORY.md', (err, data) => dc.collect('history', err, data));
 fs.readFile('README.md', dc.callback('readme'));
 fs.readFile('README.md', dc('readme'));
 dc.take('readme', fs.readFile, 'README.md');
