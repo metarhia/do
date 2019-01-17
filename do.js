@@ -26,14 +26,15 @@ Do.prototype.do = function(fn, ...args) {
 };
 
 Do.prototype.forward = function() {
-  if (this.fn) this.fn(...this.args, (err, data) => {
-    const next = this.next;
-    if (next) {
-      if (next.fn) next.forward();
-    } else if (this.done) {
-      this.done(err, data);
-    }
-  });
+  if (this.fn)
+    this.fn(...this.args, (err, data) => {
+      const next = this.next;
+      if (next) {
+        if (next.fn) next.forward();
+      } else if (this.done) {
+        this.done(err, data);
+      }
+    });
 };
 
 function Collector() {}
@@ -147,7 +148,7 @@ const collect = expected => {
     finish: null,
     unique: false,
     finished: false,
-    data: {}
+    data: {},
   };
   const collector = (...args) => {
     if (args.length === 1) return collector.callback(args[0]);
@@ -157,9 +158,8 @@ const collect = expected => {
   return Object.assign(collector, fields);
 };
 
-const ex = (...args) => (
-  (typeof(args[0]) === 'function') ? chain : collect
-)(...args);
+const ex = (...args) =>
+  (typeof args[0] === 'function' ? chain : collect)(...args);
 
 ex.do = ex;
 module.exports = ex;
