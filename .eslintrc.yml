@@ -4,8 +4,6 @@ env:
 extends:
   - eslint:recommended
   - plugin:prettier/recommended
-plugins:
-  - prettier
 globals:
   api: false
 rules:
@@ -159,8 +157,6 @@ rules:
   object-shorthand:
     - error
     - always
-  prettier/prettier:
-    - error
   prefer-arrow-callback:
     - error
   prefer-const:
