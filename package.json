@@ -37,7 +37,7 @@
     "composition"
   ],
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "main": "./do.js",
   "readmeFilename": "README.md",
