@@ -47,11 +47,11 @@
     "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\" \"**/*.yml\""
   },
   "devDependencies": {
+    "diff": "^4.0.2",
     "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.9.0",
+    "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
     "metatests": "^0.7.1",
-    "prettier": "^1.19.1",
-    "diff": "^4.0.1"
+    "prettier": "^1.19.1"
   }
 }
