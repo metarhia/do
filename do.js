@@ -141,7 +141,7 @@ const collect = expected => {
   const expectKeys = Array.isArray(expected) ? new Set(expected) : null;
   const fields = {
     expectKeys,
-    expected: expectKeys ? expected.length : expected,
+    expected: expectKeys ? expectKeys.size : expected,
     keys: new Set(),
     count: 0,
     timer: null,
