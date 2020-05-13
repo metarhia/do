@@ -44,6 +44,21 @@ metatests.test('data collector method', test => {
 });
 
 metatests.test('data collector', test => {
+  const expectedResult = { foo: 1, bar: 2 };
+
+  const dc = collect(['foo', 'bar', 'foo'])
+    .done((err, result) => {
+      test.error(err);
+      test.strictSame(result, expectedResult);
+      test.end();
+    })
+    .timeout(1000);
+
+  dc.pick('foo', 1);
+  dc.pick('bar', 2);
+});
+
+metatests.test('data collector', test => {
   const expectedResult = {
     key1: 1,
     key2: 2,
