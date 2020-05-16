@@ -3,6 +3,37 @@
 const collect = require('..');
 const metatests = require('metatests');
 
+metatests.test('finalize should cancel timer', test => {
+  collect(3)
+    .timeout(1000)
+    .finalize()
+    .done(() => {
+      test.fail();
+      test.end();
+    });
+
+  setTimeout(() => test.end(), 2000);
+});
+
+metatests.test('finalize should cancel timer', test => {
+  const finish = delay => {
+    const start = Date.now();
+    return () => {
+      if (Date.now() - start >= delay) {
+        test.fail();
+      } else {
+        test.pass();
+      }
+      test.end();
+    };
+  };
+
+  collect(3)
+    .done(finish(12000))
+    .timeout(12000)
+    .finalize();
+});
+
 metatests.test('data collector functor', test => {
   const expectedResult = {
     key1: 1,

@@ -104,14 +104,14 @@ Collector.prototype.done = function(callback) {
 
 Collector.prototype.finalize = function(key, err, data) {
   if (this.finished) return this;
-  if (this.finish) {
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
-    this.finished = true;
-    if (this.finish) this.finish(key, err, data);
+  if (this.timer) {
+    clearTimeout(this.timer);
+    this.timer = null;
   }
+  if (this.finish) {
+    this.finish(key, err, data);
+  }
+  this.finished = true;
   return this;
 };
 
