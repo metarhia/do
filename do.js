@@ -2,7 +2,7 @@
 
 function Do() {}
 
-const chain = function(fn, ...args) {
+const chain = function (fn, ...args) {
   const current = done => {
     if (done) current.done = done;
     if (current.prev) {
@@ -21,11 +21,11 @@ const chain = function(fn, ...args) {
   return Object.assign(current, fields);
 };
 
-Do.prototype.do = function(fn, ...args) {
+Do.prototype.do = function (fn, ...args) {
   return chain.call(this, fn, ...args);
 };
 
-Do.prototype.forward = function() {
+Do.prototype.forward = function () {
   if (this.fn)
     this.fn(...this.args, (err, data) => {
       const next = this.next;
@@ -39,7 +39,7 @@ Do.prototype.forward = function() {
 
 function Collector() {}
 
-Collector.prototype.collect = function(key, err, value) {
+Collector.prototype.collect = function (key, err, value) {
   if (this.finished) return this;
   if (err) {
     this.finalize(err, this.data);
@@ -62,28 +62,28 @@ Collector.prototype.collect = function(key, err, value) {
   return this;
 };
 
-Collector.prototype.pick = function(key, value) {
+Collector.prototype.pick = function (key, value) {
   this.collect(key, null, value);
   return this;
 };
 
-Collector.prototype.fail = function(key, err) {
+Collector.prototype.fail = function (key, err) {
   this.collect(key, err);
   return this;
 };
 
-Collector.prototype.take = function(key, fn, ...args) {
+Collector.prototype.take = function (key, fn, ...args) {
   fn(...args, (err, data) => {
     this.collect(key, err, data);
   });
   return this;
 };
 
-Collector.prototype.callback = function(key) {
+Collector.prototype.callback = function (key) {
   return (...args) => this(key, ...args);
 };
 
-Collector.prototype.timeout = function(msec) {
+Collector.prototype.timeout = function (msec) {
   if (this.timer) {
     clearTimeout(this.timer);
     this.timer = null;
@@ -97,12 +97,12 @@ Collector.prototype.timeout = function(msec) {
   return this;
 };
 
-Collector.prototype.done = function(callback) {
+Collector.prototype.done = function (callback) {
   this.finish = callback;
   return this;
 };
 
-Collector.prototype.finalize = function(key, err, data) {
+Collector.prototype.finalize = function (key, err, data) {
   if (this.finished) return this;
   if (this.finish) {
     if (this.timer) {
@@ -115,18 +115,18 @@ Collector.prototype.finalize = function(key, err, data) {
   return this;
 };
 
-Collector.prototype.distinct = function(value = true) {
+Collector.prototype.distinct = function (value = true) {
   this.unique = value;
   return this;
 };
 
-Collector.prototype.cancel = function(err) {
+Collector.prototype.cancel = function (err) {
   err = err || new Error('Collector cancelled');
   this.finalize(err, this.data);
   return this;
 };
 
-Collector.prototype.then = function(fulfill, reject) {
+Collector.prototype.then = function (fulfill, reject) {
   this.finish = (err, result) => {
     if (err) reject(err);
     else fulfill(result);
