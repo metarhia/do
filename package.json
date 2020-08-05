@@ -52,6 +52,6 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "metatests": "^0.7.1",
-    "prettier": "^1.19.1"
+    "prettier": "^2.0.5"
   }
 }
