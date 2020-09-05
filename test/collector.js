@@ -58,6 +58,21 @@ metatests.test('data collector', test => {
   dc.pick('bar', 2);
 });
 
+metatests.test('data collector with shorthand pick', test => {
+  const expectedResult = { foo: 1, bar: 2 };
+
+  const dc = collect(['foo', 'bar', 'foo'])
+    .done((err, result) => {
+      test.error(err);
+      test.strictSame(result, expectedResult);
+      test.end();
+    })
+    .timeout(1000);
+
+  dc('foo', 1);
+  dc('bar', 2);
+});
+
 metatests.test('data collector', test => {
   const expectedResult = {
     key1: 1,
@@ -157,6 +172,17 @@ metatests.test('collect with error', test => {
   col.fail('someKey', testErr);
 });
 
+metatests.test('collect with error (shorthand fail)', test => {
+  const testErr = new Error('Test error');
+  const col = collect(1);
+  col.done((err, res) => {
+    test.strictSame(err, testErr);
+    test.strictSame(res, {});
+    test.end();
+  });
+  col('someKey', testErr);
+});
+
 metatests.test('collect method calling after it is done', test => {
   const col = collect(1);
   col.done((err, res) => {
@@ -198,6 +224,17 @@ metatests.test('collect with take', test => {
   });
   const af = (x, callback) => callback(null, x);
   col.take('someKey', af, 'someVal');
+});
+
+metatests.test('collect with shorthand take', test => {
+  const col = collect(1);
+  col.done((err, res) => {
+    test.error(err);
+    test.strictSame(res, { someKey: 'someVal' });
+    test.end();
+  });
+  const af = (x, callback) => callback(null, x);
+  col('someKey', af, 'someVal');
 });
 
 metatests.test('collect generate callback', test => {

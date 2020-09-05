@@ -152,6 +152,11 @@ const collect = expected => {
   };
   const collector = (...args) => {
     if (args.length === 1) return collector.callback(args[0]);
+    if (args.length === 2) {
+      if (args[1] instanceof Error) return collector.fail(...args);
+      else return collector.pick(...args);
+    }
+    if (typeof args[1] === 'function') return collector.take(...args);
     return collector.collect(...args);
   };
   Object.setPrototypeOf(collector, Collector.prototype);
