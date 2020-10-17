@@ -1,6 +1,6 @@
 ## "do" is the simplest way to manage asynchronicity
 
-[![Testing CI](https://github.com/metarhia/do/workflows/Testing%20CI/badge.svg)](https://github.com/metarhia/do/actions)
+[![CI Status](https://github.com/metarhia/do/workflows/Testing%20CI/badge.svg)](https://github.com/metarhia/do/actions?query=workflow%3A%22Testing+CI%22+branch%3Amaster)
 [![NPM Version](https://badge.fury.io/js/do.svg)](https://badge.fury.io/js/do)
 [![NPM Downloads/Month](https://img.shields.io/npm/dm/do.svg)](https://www.npmjs.com/package/do)
 [![NPM Downloads](https://img.shields.io/npm/dt/do.svg)](https://www.npmjs.com/package/do)
