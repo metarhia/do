@@ -40,6 +40,7 @@
     "node": ">=8.0.0"
   },
   "main": "./do.js",
+  "files": [],
   "readmeFilename": "README.md",
   "scripts": {
     "test": "npm run lint && metatests test",
