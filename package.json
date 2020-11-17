@@ -1,6 +1,6 @@
 {
   "name": "do",
-  "version": "0.5.16",
+  "version": "0.6.0",
   "description": "The simplest way to manage asynchronicity",
   "license": "MIT",
   "contributors": [
