@@ -39,7 +39,7 @@
   "engines": {
     "node": ">=8.0.0"
   },
-  "main": "./do.js",
+  "main": "do.js",
   "files": [],
   "readmeFilename": "README.md",
   "scripts": {
