@@ -3,7 +3,7 @@
 function Do() {}
 
 const chain = function (fn, ...args) {
-  const current = done => {
+  const current = (done) => {
     if (done) current.done = done;
     if (current.prev) {
       current.prev.next = current;
@@ -137,7 +137,7 @@ Collector.prototype.then = function (fulfill, reject) {
 // Collector instance constructor
 //   expected <number> or array of string,
 // Returns: <Function> Collector
-const collect = expected => {
+const collect = (expected) => {
   const expectKeys = Array.isArray(expected) ? new Set(expected) : null;
   const fields = {
     expectKeys,

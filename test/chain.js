@@ -10,7 +10,7 @@ const wrapAsync = (
   setTimeout(callback, Math.floor(Math.random() * 1000));
 };
 
-metatests.test('simple chain/do', test => {
+metatests.test('simple chain/do', (test) => {
   const readConfig = (name, callback) => {
     test.strictSame(name, 'myConfig');
     wrapAsync(() => {
