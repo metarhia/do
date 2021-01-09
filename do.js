@@ -102,7 +102,7 @@ Collector.prototype.done = function (callback) {
   return this;
 };
 
-Collector.prototype.finalize = function (key, err, data) {
+Collector.prototype.finalize = function (err, data) {
   if (this.finished) return this;
   if (this.finish) {
     if (this.timer) {
@@ -110,7 +110,7 @@ Collector.prototype.finalize = function (key, err, data) {
       this.timer = null;
     }
     this.finished = true;
-    if (this.finish) this.finish(key, err, data);
+    if (this.finish) this.finish(err, data);
   }
   return this;
 };
