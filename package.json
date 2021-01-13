@@ -1,6 +1,6 @@
 {
   "name": "do",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "The simplest way to manage asynchronicity",
   "license": "MIT",
   "contributors": [
@@ -12,6 +12,7 @@
     "type": "git",
     "url": "https://github.com/metarhia/do"
   },
+  "homepage": "https://metarhia.com",
   "keywords": [
     "metasync",
     "callback",
