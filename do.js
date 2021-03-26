@@ -7,6 +7,7 @@ const chain = function (fn, ...args) {
     if (done) current.done = done;
     if (current.prev) {
       current.prev.next = current;
+      current.prev.done = current.done;
       current.prev();
     } else {
       current.forward();
@@ -24,16 +25,21 @@ Do.prototype.do = function (fn, ...args) {
   return chain.call(this, fn, ...args);
 };
 
-Do.prototype.forward = function () {
-  if (this.fn)
-    this.fn(...this.args, (err, data) => {
-      const next = this.next;
-      if (next) {
-        if (next.fn) next.forward();
-      } else if (this.done) {
-        this.done(err, data);
-      }
-    });
+Do.prototype.forward = function (rest = []) {
+  if (!this.fn) return;
+  const args = [...this.args, ...rest];
+  this.fn(...args, (err, ...data) => {
+    if (err) {
+      this.done(err);
+      return;
+    }
+    const next = this.next;
+    if (next) {
+      if (next.fn) next.forward(data);
+    } else if (this.done) {
+      this.done(err, ...data);
+    }
+  });
 };
 
 function Collector() {}
