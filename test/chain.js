@@ -10,6 +10,20 @@ const wrapAsync = (
   setTimeout(callback, Math.floor(Math.random() * 1000));
 };
 
+metatests.test('last call terminate chain', (test) => {
+  const readConfig = (name, callback) => {
+    test.strictSame(name, 'myConfig');
+    wrapAsync(() => {
+      callback(null, { name });
+    });
+  };
+  const c1 = chain.do(readConfig, 'myConfig');
+  const actual = c1(() => {
+    test.strictSame(actual, undefined);
+    test.end();
+  });
+});
+
 metatests.test('simple chain/do', (test) => {
   const readConfig = (name, callback) => {
     test.strictSame(name, 'myConfig');
