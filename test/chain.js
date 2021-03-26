@@ -53,7 +53,7 @@ metatests.test('simple chain/do', (test) => {
   const readConfig = (name, callback) => {
     test.strictSame(name, 'myConfig');
     wrapAsync(() => {
-      callback(null); // should be able to pass nothing
+      callback(null);
     });
   };
 
