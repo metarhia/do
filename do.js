@@ -11,7 +11,6 @@ const chain = function (fn, ...args) {
     } else {
       current.forward();
     }
-    return current;
   };
 
   const prev = this instanceof Do ? this : null;
