@@ -7,8 +7,7 @@ const chain = function (fn, ...args) {
     if (done) current.done = done;
     if (current.prev) {
       current.prev.next = current;
-      current.prev.done = current.done;
-      current.prev();
+      current.prev(done);
     } else {
       current.forward();
     }
