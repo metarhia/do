@@ -90,3 +90,53 @@ metatests.test('simple chain/do', (test) => {
     test.end();
   });
 });
+
+metatests.test(
+  'should be able to branch out',
+  (test) => {
+    const readConnectionString = (configName, callback) => {
+      test.strictSame(configName, 'myConfig');
+      setTimeout(() => callback(null, 'connectionString'), 10);
+    };
+
+    const selectFromDb = (query, connectionString, callback) => {
+      test.strictSame(connectionString, 'connectionString');
+      test.strictSame(query, 'select * from cities');
+      setTimeout(() => callback(null, ['A', 'B']), 10);
+    };
+
+    const fetchCityData = (cities, callback) => {
+      test.strictSame(cities, ['A', 'B']);
+      setTimeout(() => callback(null, [1, 2]), 200);
+    };
+
+    const writeToFile = (path, cities, callback) => {
+      test.strictSame(path, 'cities.md');
+      test.strictSame(cities, ['A', 'B']);
+      setTimeout(() => callback(new Error('Something went wrong')), 50);
+    };
+
+    const common = chain
+      .do(readConnectionString, 'myConfig')
+      .do(selectFromDb, 'select * from cities');
+
+    const c1 = common.do(fetchCityData);
+    const c2 = common.do(writeToFile, 'cities.md');
+
+    common((err, data) => {
+      test.strictSame(err, null);
+      test.strictSame(data, ['A', 'B']);
+    });
+
+    c1((err, data) => {
+      test.strictSame(err, null);
+      test.strictSame(data, [1, 2]);
+      test.end();
+    });
+
+    c2((err, data) => {
+      test.strictSame(data, undefined);
+      test.strictSame(err.message, 'Something went wrong');
+    });
+  }
+);
