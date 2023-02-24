@@ -260,7 +260,7 @@ metatests.test('collect generate callback shorthand', (test) => {
 });
 
 metatests.test('collect with timeout error', (test) => {
-  const timeoutErr = new Error('Collector timeout');
+  const timeoutErr = new Error('Collector timed out');
   const col = collect(1)
     .done((err, res) => {
       test.strictSame(err, timeoutErr);
