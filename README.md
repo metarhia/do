@@ -53,6 +53,6 @@ setTimeout(() => dc.pick('timer', { date: new Date() }), 1000);
 
 ## License & Contributors
 
-Copyright (c) 2013-2023 do contributors.
+Copyright (c) 2013-2026 `do` contributors.
 See github for full [contributors list](https://github.com/metarhia/do/graphs/contributors).
 Do is [MIT licensed](./LICENSE).
