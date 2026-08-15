@@ -45,14 +45,13 @@
   "readmeFilename": "README.md",
   "scripts": {
     "test": "npm run lint && metatests test",
-    "lint": "eslint . && prettier -c \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\" \"**/*.yml\"",
-    "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \".*rc\" \"**/*.yml\""
+    "lint": "eslint . && prettier -c \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/*.yml\"",
+    "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/*.yml\""
   },
   "devDependencies": {
-    "eslint": "^8.53.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "metatests": "^0.8.2",
-    "prettier": "^3.0.3"
+    "eslint": "^9.39.2",
+    "eslint-config-metarhia": "^9.1.5",
+    "metatests": "^0.9.3",
+    "prettier": "^3.7.4"
   }
 }
