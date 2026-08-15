@@ -312,7 +312,7 @@ metatests.test('collect then success', (test) => {
     (err) => {
       test.error(err);
       test.end();
-    }
+    },
   );
   col.pick('Key', 'value');
 });
@@ -328,6 +328,6 @@ metatests.test('collect then fail', (test) => {
       (err) => {
         test.assert(err);
         test.end();
-      }
+      },
     );
 });
