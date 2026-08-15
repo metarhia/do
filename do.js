@@ -26,29 +26,36 @@ Do.prototype.do = function (fn, ...args) {
 };
 
 Do.prototype.forward = function () {
-  if (this.fn)
-    this.fn(...this.args, (err, data) => {
-      const next = this.next;
-      if (next) {
-        if (next.fn) next.forward();
-      } else if (this.done) {
-        this.done(err, data);
-      }
-    });
+  if (!this.fn) return;
+  this.fn(...this.args, (error, data) => {
+    if (error) {
+      let link = this;
+      while (link.next) link = link.next;
+      if (link.done) link.done(error, data);
+      return;
+    }
+    const next = this.next;
+    if (next) {
+      if (next.fn) next.forward();
+    } else if (this.done) {
+      this.done(error, data);
+    }
+  });
 };
 
 function Collector() {}
 
-Collector.prototype.collect = function (key, err, value) {
+Collector.prototype.collect = function (key, error, value) {
   if (this.finished) return this;
-  if (err) {
-    this.finalize(err, this.data);
+  if (error) {
+    this.finalize(error, this.data);
     return this;
   }
-  if (this.expectKeys && !this.expectKeys.has(key)) {
+  const isUnexpected = this.expectKeys && !this.expectKeys.has(key);
+  if (isUnexpected) {
     if (this.unique) {
-      const err = new Error('Unexpected key: ' + key);
-      this.finalize(err, this.data);
+      const unexpected = new Error(`Unexpected key: ${key}`);
+      this.finalize(unexpected, this.data);
       return this;
     }
   } else if (!this.keys.has(key)) {
@@ -67,14 +74,14 @@ Collector.prototype.pick = function (key, value) {
   return this;
 };
 
-Collector.prototype.fail = function (key, err) {
-  this.collect(key, err);
+Collector.prototype.fail = function (key, error) {
+  this.collect(key, error);
   return this;
 };
 
 Collector.prototype.take = function (key, fn, ...args) {
-  fn(...args, (err, data) => {
-    this.collect(key, err, data);
+  fn(...args, (error, data) => {
+    this.collect(key, error, data);
   });
   return this;
 };
@@ -90,8 +97,8 @@ Collector.prototype.timeout = function (msec) {
   }
   if (msec > 0) {
     this.timer = setTimeout(() => {
-      const err = new Error('Collector timed out');
-      this.finalize(err, this.data);
+      const error = new Error('Collector timed out');
+      this.finalize(error, this.data);
     }, msec);
   }
   return this;
@@ -102,16 +109,15 @@ Collector.prototype.done = function (callback) {
   return this;
 };
 
-Collector.prototype.finalize = function (err, data) {
+Collector.prototype.finalize = function (error, data) {
   if (this.finished) return this;
-  if (this.finish) {
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
-    }
-    this.finished = true;
-    if (this.finish) this.finish(err, data);
+  if (!this.finish) return this;
+  if (this.timer) {
+    clearTimeout(this.timer);
+    this.timer = null;
   }
+  this.finished = true;
+  this.finish(error, data);
   return this;
 };
 
@@ -120,16 +126,19 @@ Collector.prototype.distinct = function (value = true) {
   return this;
 };
 
-Collector.prototype.cancel = function (err) {
-  err = err || new Error('Collector cancelled');
-  this.finalize(err, this.data);
+Collector.prototype.cancel = function (error) {
+  const reason = error ?? new Error('Collector cancelled');
+  this.finalize(reason, this.data);
   return this;
 };
 
 Collector.prototype.then = function (fulfill, reject) {
-  this.finish = (err, result) => {
-    if (err) reject(err);
-    else fulfill(result);
+  this.finish = (error, result) => {
+    if (error) {
+      if (typeof reject === 'function') reject(error);
+      return;
+    }
+    if (typeof fulfill === 'function') fulfill(result);
   };
   return this;
 };
@@ -153,8 +162,9 @@ const collect = (expected) => {
   const collector = (...args) => {
     if (args.length === 1) return collector.callback(args[0]);
     if (args.length === 2) {
-      if (args[1] instanceof Error) return collector.fail(...args);
-      else return collector.pick(...args);
+      const isError = args[1] instanceof Error;
+      if (isError) return collector.fail(...args);
+      return collector.pick(...args);
     }
     if (typeof args[1] === 'function') return collector.take(...args);
     return collector.collect(...args);
@@ -163,8 +173,10 @@ const collect = (expected) => {
   return Object.assign(collector, fields);
 };
 
-const ex = (...args) =>
-  (typeof args[0] === 'function' ? chain : collect)(...args);
+const create = (...args) => {
+  const factory = typeof args[0] === 'function' ? chain : collect;
+  return factory(...args);
+};
 
-ex.do = ex;
-module.exports = ex;
+create.do = create;
+module.exports = create;

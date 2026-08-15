@@ -5,7 +5,7 @@ const metatests = require('metatests');
 
 const wrapAsync = (
   // Emulate Asynchronous calls
-  callback // function
+  callback, // function
 ) => {
   setTimeout(callback, Math.floor(Math.random() * 1000));
 };
